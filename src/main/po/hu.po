@@ -1,0 +1,140 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the josm-plugin_phonenumber package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: josm-plugin_phonenumber 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-02 22:34+0200\n"
+"PO-Revision-Date: 2023-05-02 22:37+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:46
+msgid "Checks all common phone keys and values"
+msgstr "Ellenőrzi az összes gyakori telefon kulcsot és értéket"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/PhoneNumberDownloadAction.kt:14
+msgid "Download all objects with phone number in the current view"
+msgstr ""
+"Az összes telefonszámmal rendelkező objektum letöltése az aktuális nézetben"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/PhoneNumberDownloadTask.kt:16
+msgid "Download objects via Overpass API"
+msgstr "Objektumok letöltése Overpass API-n keresztül"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/PhoneNumberDownloadAction.kt:12
+msgid "Download objects with phone number"
+msgstr "Telefonszámmal rendelkező objektumok letöltése"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:74
+msgid "EXPERIMENTAL! Enable autofix"
+msgstr "KÍSÉRLETI! Automatikus javítás engedélyezése"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/UriPasteAction.kt:27
+#, java-format
+msgid "Edit: {0}"
+msgstr "Szerkeszt: {0}"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:202
+msgid "Fix phone number values"
+msgstr "Telefonszám értékek javítása"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:157
+msgid "Not enough grouping characters. Is it contains extension?"
+msgstr "Nincs elég csoportosító karakter. Mellékhívószámot tartalmaz?"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/UriPasteAction.kt:27
+msgid "Paste"
+msgstr "Beilleszt"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:46
+msgid "Phone number"
+msgstr "Telefonszám"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:112
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:123
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:134
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:145
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:156
+msgid "Phone number invalid"
+msgstr "Érvénytelen telefonszám"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:167
+msgid "Phone number issues"
+msgstr "Telefonszám problémák"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:178
+msgid "Phone number possibly in wrong region"
+msgstr "Telefonszám feltehetően rossz régióban"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/ContactSchemeSwitchAction.kt:23
+msgid "Switch this object's contact tags to the newer prefix scheme"
+msgstr "Az objektum kapcsolattartási címkéinek az újabb előtagsémára állítása"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/ContactSchemeSwitchAction.kt:19
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/ContactSchemeSwitchAction.kt:22
+#: src/main/kotlin/com/github/gabortim/phonenumber/action/ContactSchemeSwitchAction.kt:61
+msgid "Switch to contact prefix scheme"
+msgstr "contact előtagsémára váltás"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumber.kt:257
+msgid "contact: prefix scheme recommended"
+msgstr "contact: előtagséma ajánlott"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:124
+#, java-format
+msgid "couldn''t parse {0}"
+msgstr "nem parsolható {0}"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumber.kt:247
+msgid "duplicate values"
+msgstr "ismétlődő értékek"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumber.kt:255
+msgid "inappropriate key"
+msgstr "nem megfelelő kulcs"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumber.kt:253
+msgid "not in E.123 format"
+msgstr "nem E.123 formátumban"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumber.kt:250
+msgid "premium rate number"
+msgid_plural "premium rate numbers"
+msgstr[0] "emelt díjas telefonszám"
+msgstr[1] "emelt díjas telefonszámok"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:135
+#, java-format
+msgid "too short {0}"
+msgstr "túl rövid {0}"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:146
+#, java-format
+msgid "unusual chars {0}"
+msgstr "szokatlan karakterek {0}"
+
+#: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:113
+#, java-format
+msgid "wrong separator used in {0} key"
+msgstr "helytelen elválasztójel a {0} kulcsban"
+
+#. Plugin description for josm-phonenumber
+msgid ""
+"Gives the validator ability to verify and auto-fix incorrect phone numbers"
+msgstr ""
+"Lehetővé teszi a validátor számára a hibás telefonszámok ellenőrzését és "
+"automatikus javítását"
+
+#. Translator credits (translators who want to be credited for their contributions can add their names here as the translation)
+msgid "translator-credits"
+msgstr ""

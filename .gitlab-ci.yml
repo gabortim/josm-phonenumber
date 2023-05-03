@@ -1,0 +1,63 @@
+stages:
+  - verify
+  - validate
+  - visualize
+  - package
+
+compile-jdk8:
+  stage: verify
+  image: amd64/openjdk:8-jdk-bullseye
+  script:
+    - ./gradlew build
+
+compile-jdk11:
+  stage: verify
+  image: amd64/openjdk:11-jdk-bullseye
+  script:
+    - ./gradlew build
+
+compile-jdk17:
+  stage: verify
+  image: amd64/openjdk:17-jdk-bullseye
+  script:
+    - ./gradlew build
+
+test:
+  stage: validate
+  image: amd64/openjdk:11-jdk-bullseye
+  script:
+    - ./gradlew check jacocoTestReport
+  needs: [ "compile-jdk11" ]
+  artifacts:
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
+    paths:
+      - build/reports/jacoco/test/jacocoTestReport.xml
+  coverage: '/Branch coverage: \d+\.\d+/'
+
+coverage:
+  stage: visualize
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.9
+  script:
+    - python /opt/cover2cover.py build/reports/jacoco/test/jacocoTestReport.xml $CI_PROJECT_DIR/src/main/kotlin/ > build/cobertura.xml
+  needs: [ "test" ]
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: build/cobertura.xml
+  allow_failure: true
+
+jar:
+  stage: package
+  image: amd64/openjdk:11-jdk-bullseye
+  script:
+    - apt-get update
+    - apt-get install -y gettext
+    - ./gradlew dist generatePot
+  needs: [ "test" ]
+  artifacts:
+    paths:
+      - build/dist/*.jar
+      - build/i18n/pot/*.pot
+    expire_in: 1 week
