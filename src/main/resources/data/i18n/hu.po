@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: josm-plugin_phonenumber 1.0.0\n"
+"Project-Id-Version: josm-plugin_phonenumber 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 22:34+0200\n"
-"PO-Revision-Date: 2023-05-02 22:37+0200\n"
+"POT-Creation-Date: 2023-05-04 10:47+0200\n"
+"PO-Revision-Date: 2023-05-04 10:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hu\n"
@@ -39,11 +39,6 @@ msgstr "Telefonszámmal rendelkező objektumok letöltése"
 msgid "EXPERIMENTAL! Enable autofix"
 msgstr "KÍSÉRLETI! Automatikus javítás engedélyezése"
 
-#: src/main/kotlin/com/github/gabortim/phonenumber/action/UriPasteAction.kt:27
-#, java-format
-msgid "Edit: {0}"
-msgstr "Szerkeszt: {0}"
-
 #: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:202
 msgid "Fix phone number values"
 msgstr "Telefonszám értékek javítása"
@@ -51,10 +46,6 @@ msgstr "Telefonszám értékek javítása"
 #: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:157
 msgid "Not enough grouping characters. Is it contains extension?"
 msgstr "Nincs elég csoportosító karakter. Mellékhívószámot tartalmaz?"
-
-#: src/main/kotlin/com/github/gabortim/phonenumber/action/UriPasteAction.kt:27
-msgid "Paste"
-msgstr "Beilleszt"
 
 #: src/main/kotlin/com/github/gabortim/phonenumber/test/PhoneNumberValidator.kt:46
 msgid "Phone number"

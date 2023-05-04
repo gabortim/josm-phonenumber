@@ -103,7 +103,7 @@ internal object NumberFormatter {
         val numberOfOriginalGroupingChars = getGroupingCharsCount(original.rawInput)
         val numberOfFormattedGroupingChars = getGroupingCharsCount(formatted)
 
-        // TODO: ha a hosszához képest kevés az elválasztó a paramétert használni
+        // TODO: if doesn't have enough separator chars, use the parameter
         //int stripStringLen = formatted.length() - numberOfFormattedGroupingChars;
         return if (numberOfFormattedGroupingChars < numberOfOriginalGroupingChars &&
             formatted.length / numberOfFormattedGroupingChars < 3

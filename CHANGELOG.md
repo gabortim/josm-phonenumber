@@ -1,10 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2023-05-02 - First public release! 🎉
+## [1.0.1] - 2023-05-04
+### Fixed
+- Icon path in the MANIFEST.MF file (GH #1)
+### Changed
+- Translation files moved to `src/main/resources/data/i18n`
+
+## [1.0.0] - 2023-05-03 - First public release! 🎉
 ### Changed
 - Values deduped on contact scheme switch action
 - Decouple libphonenumber dependency and add a workaround until a final solution
@@ -22,11 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Kotlin to 1.8.20
 
 ## [0.16.1] - 2023-02-25
-### Changed
-- Fix ContactSchemeSwitchAction
+### Fixed
+- ContactSchemeSwitchAction
   - now the undo action is working
   - data layer remove no longer breaks the menu
-- Fix GitHub release process
+- GitHub release process
+### Changed
 - Update Kotlin to 1.8.10
 - Update Gradle to 7.6.1
 - Bump JOSM compile version to r18678
@@ -39,12 +46,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Kotlin to 1.8.0
 
 ## [0.15.0] - 2022-11-06
+### Added
+- Contact scheme switch action to tag menu
 ### Changed
 - Update project dependencies
 - Bump JOSM compile version to r18583
 - Update Kotlin to 1.7.20
-### Added
-- Contact scheme switch action to tag menu
 
 ## [0.14.3] - 2022-06-06
 ### Changed
@@ -61,8 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump JOSM compile version to r18387
 
 ## [0.14.0] - 2022-02-22
-### Changed
-- Added suffixed key check (e.g. `phone_2`) - 0c7ec9a1
+### Added
+- Suffixed key check (e.g. `phone_2`) - 0c7ec9a1
 
 ## [0.13.0] - 2022-01-26
 ### Changed
@@ -88,7 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   map view
 
 ## [0.10.2] - 2021-12-24
-### Changed
+### Security
 - Gradle wrapper updated to 7.3.3 (fix Log4j vulnerabilities)
 
 ## [0.10.1] - 2021-12-14
@@ -98,8 +105,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.10.0] - 2021-12-05
 ### Added
-- added duplicate removal (see #2)
-- added tagging scheme change ability to `contact:` prefix scheme
+- duplicate removal (see #2)
+- tagging scheme change ability to `contact:` prefix scheme
 ### Changed
 - reworked the internals to make it more robust
 - Gradle wrapper updated to 7.3.1
@@ -117,16 +124,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kotlin upgraded to 1.4.30
 
 ## [0.6.1] - 2021-01-13
-### Changed
-- Fixed number keys splitting
-- Fixed autofix preference loading
+### Fixed
+- Number keys splitting
+- Autofix preference loading
 
 ## [0.6.0] - 2021-01-11
 ### Changed
-- Code completely rewritten in Kotlin
-- Fixed autofix preference saving
-- Fixed the autofix tag deletion bug
+- Code has completely rewritten in Kotlin
 - Only show beautify warning when autofix explicitly enabled
+### Fixed
+- Autofix preference saving
+- Autofix tag deletion bug
 
 ### Removed
 - Apache Commons dependency
@@ -141,7 +149,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Migrated Gradle build script from Groovy to Kotlin
 </details>
-
-[comment]: <> (### Removed)
-
-[comment]: <> (- Section about "changelog" vs "CHANGELOG".)

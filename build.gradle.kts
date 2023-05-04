@@ -19,10 +19,10 @@ compileTestKotlin.kotlinOptions {
     jvmTarget = JavaVersion.VERSION_1_8.toString()
 }
 
-project.allprojects {
-    java.sourceCompatibility = JavaVersion.VERSION_1_8
-    java.targetCompatibility = JavaVersion.VERSION_1_8
-}.toString()
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
     mavenCentral()
@@ -36,7 +36,13 @@ repositories {
     }
 }
 
-version = "1.0.0"
+sourceSets {
+    main {
+        i18n.po.setSrcDirs(setOf("src/main/resources/data/i18n"))
+    }
+}
+
+version = "1.0.1"
 val versionFile = "version.txt"
 
 josm {
@@ -49,7 +55,7 @@ josm {
         minJosmVersion = "17428"
         canLoadAtRuntime = true
         mainClass = "com.github.gabortim.phonenumber.PhoneNumberPlugin"
-        iconPath = "icon.svg"
+        iconPath = "images/icon.svg"
         website = URL("https://github.com/gabortim/josm-phonenumber")
     }
 }

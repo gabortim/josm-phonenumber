@@ -36,6 +36,6 @@ or [JOSM Trac](https://josm.openstreetmap.de/newticket?component=Plugin%20phonen
 ### Translation
 Download the latest `.pot` file from the CI/CD artefacts and translate it locally.
 After the translation is done, create a Merge Request with the file to the
-[po](/src/main/po) directory.
+[i18n](/src/main/resources/data/i18n) directory.
 
 Existing translations can be modified in the same way.
