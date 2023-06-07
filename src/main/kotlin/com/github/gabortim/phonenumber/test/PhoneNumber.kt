@@ -1,10 +1,11 @@
 package com.github.gabortim.phonenumber.test
 
-import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType
 import com.github.gabortim.phonenumber.tool.NumberFormatter
 import com.github.gabortim.phonenumber.tool.NumberFormatter.FailReason
 import com.github.gabortim.phonenumber.tool.NumberTools.splitAndStrip
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType
 import org.openstreetmap.josm.data.osm.OsmPrimitive
 import org.openstreetmap.josm.data.osm.TagMap
 import org.openstreetmap.josm.tools.I18n.tr
@@ -150,12 +151,12 @@ class PhoneNumber(
                         FailReason.NOT_WELL_FORMATTED -> notWellFormatted.add(number)
                     }
 
-                } catch (e: Exception) {
+                } catch (e: NumberParseException) {
                     // add original tag without modification
                     addEntry(tag.key, number, tag.key)
                     invalid.add(number)
 
-                    Logging.error(e)
+                    Logging.trace(e)
                     Logging.debug("Problematic number found '$number' (${primitive.type}${primitive.id})")
                     continue
                 }

@@ -4,7 +4,9 @@ import com.github.gabortim.phonenumber.tool.NumberTools.containsDDI
 import com.github.gabortim.phonenumber.tool.NumberTools.containsNonstandardChars
 import com.github.gabortim.phonenumber.tool.NumberTools.splitAndStrip
 import com.github.gabortim.phonenumber.tool.NumberTools.splitByLastSeparator
-import org.testng.Assert.*
+import org.testng.Assert.assertEquals
+import org.testng.Assert.assertFalse
+import org.testng.Assert.assertTrue
 import org.testng.annotations.Test
 
 class NumberToolsTest {

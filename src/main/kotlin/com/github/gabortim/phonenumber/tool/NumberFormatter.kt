@@ -1,13 +1,13 @@
 package com.github.gabortim.phonenumber.tool
 
+import com.github.gabortim.phonenumber.tool.NumberTools.containsDDI
+import com.github.gabortim.phonenumber.tool.NumberTools.containsNonstandardChars
+import com.github.gabortim.phonenumber.tool.NumberTools.splitByLastSeparator
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.PhoneNumberUtil.ValidationResult
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.google.i18n.phonenumbers.ShortNumberInfo
-import com.github.gabortim.phonenumber.tool.NumberTools.containsDDI
-import com.github.gabortim.phonenumber.tool.NumberTools.containsNonstandardChars
-import com.github.gabortim.phonenumber.tool.NumberTools.splitByLastSeparator
 
 internal object NumberFormatter {
     private val phoneNumberUtil = PhoneNumberUtil.getInstance()

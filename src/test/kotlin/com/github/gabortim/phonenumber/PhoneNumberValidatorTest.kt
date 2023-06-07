@@ -1,7 +1,12 @@
 package com.github.gabortim.phonenumber
 
 import com.github.gabortim.phonenumber.test.PhoneNumberValidator
-import org.openstreetmap.josm.data.osm.*
+import org.openstreetmap.josm.data.osm.DataSet
+import org.openstreetmap.josm.data.osm.Node
+import org.openstreetmap.josm.data.osm.OsmPrimitive
+import org.openstreetmap.josm.data.osm.Relation
+import org.openstreetmap.josm.data.osm.TagMap
+import org.openstreetmap.josm.data.osm.Way
 import org.testng.Assert.assertEquals
 import org.testng.Assert.assertTrue
 import org.testng.annotations.AfterTest

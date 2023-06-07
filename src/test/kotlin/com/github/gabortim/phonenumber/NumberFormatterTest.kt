@@ -1,14 +1,16 @@
 package com.github.gabortim.phonenumber
 
-import com.google.i18n.phonenumbers.NumberParseException
-import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.github.gabortim.phonenumber.tool.NumberFormatter.format
 import com.github.gabortim.phonenumber.tool.NumberFormatter.isEmergency
 import com.github.gabortim.phonenumber.tool.NumberFormatter.isPremiumRate
 import com.github.gabortim.phonenumber.tool.NumberFormatter.possiblyValidExtensionSeparatorUsed
-import org.testng.Assert.*
-import org.testng.AssertJUnit.fail
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
+import org.testng.Assert.assertEquals
+import org.testng.Assert.assertFalse
+import org.testng.Assert.assertTrue
+import org.testng.Assert.fail
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
