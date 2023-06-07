@@ -58,9 +58,11 @@ class ContactSchemeSwitchAction :
             }
         }
 
-        val seqCmds = SequenceCommand(tr("Switch to contact prefix scheme"), propChangeCmds as Collection<Command>?)
+        val seqCmds = SequenceCommand(tr("Switch to contact prefix scheme"), propChangeCmds as Collection<Command>)
 
         UndoRedoHandler.getInstance().add(seqCmds, true)
+
+        updateEnabledState(primitives)
     }
 
     /**

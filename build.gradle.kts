@@ -42,7 +42,7 @@ sourceSets {
     }
 }
 
-version = "1.0.1"
+version = "1.0.2"
 val versionFile = "version.txt"
 
 josm {
