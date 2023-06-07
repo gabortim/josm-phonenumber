@@ -171,10 +171,7 @@ class PhoneNumber(
      * @param oldKey the old key used to detect schema and class phone type change
      */
     private fun addEntry(key: String, value: String, oldKey: String) {
-        if (processedNumbers[prefix + key] == null)
-            processedNumbers[prefix + key] = LinkedHashSet(4)
-
-        processedNumbers[prefix + key]!!.add(value)
+        processedNumbers.getOrPut(prefix + key) { linkedSetOf() }.add(value)
 
         // detect class change
         if (oldKey.substringAfter(CONTACT_SCHEME_PREFIX) != key.substringAfter(CONTACT_SCHEME_PREFIX))
