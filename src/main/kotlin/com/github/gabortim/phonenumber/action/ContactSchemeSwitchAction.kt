@@ -14,6 +14,8 @@ import org.openstreetmap.josm.gui.layer.MainLayerManager
 import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeListener
 import org.openstreetmap.josm.tools.I18n.tr
 import java.awt.event.ActionEvent
+import javax.swing.event.PopupMenuEvent
+import javax.swing.event.PopupMenuListener
 
 class ContactSchemeSwitchAction :
     JosmAction(tr("Switch to contact prefix scheme"), null, null, null, false),
@@ -46,9 +48,6 @@ class ContactSchemeSwitchAction :
                     // use new key with prefix
                     val result = merge(primitive, key)
 
-                    // should not happen, ever
-                    assert(result.isNotEmpty()) { "should not happen, ever" }
-
                     propChangeCmds.add(ChangePropertyCommand(listOf(primitive), result))
                 }
             }
@@ -57,8 +56,6 @@ class ContactSchemeSwitchAction :
         val seqCmds = SequenceCommand(tr("Switch to contact prefix scheme"), propChangeCmds as Collection<Command>)
 
         UndoRedoHandler.getInstance().add(seqCmds, true)
-
-        updateEnabledState(primitives)
     }
 
     /**
@@ -82,14 +79,27 @@ class ContactSchemeSwitchAction :
         )
     }
 
-    override fun activeOrEditLayerChanged(e: MainLayerManager.ActiveLayerChangeEvent?) {
-        if (e?.previousActiveLayer == null && MainApplication.isDisplayingMapView()) {
+    override fun activeOrEditLayerChanged(l: MainLayerManager.ActiveLayerChangeEvent?) {
+        if (l?.previousActiveLayer == null && MainApplication.isDisplayingMapView()) {
             val popupMenuHandler = MainApplication.getMap().propertiesDialog.propertyPopupMenuHandler
             //TODO: after setupTagsMenu() call invalidate() needed
             // also the action is not added to the end of the list
 
             popupMenuHandler.addSeparator()
             popupMenuHandler.addAction(this)
+            popupMenuHandler.addListener(object : PopupMenuListener {
+                override fun popupMenuWillBecomeVisible(e: PopupMenuEvent) {
+                    updateEnabledStateOnCurrentSelection()
+                }
+
+                override fun popupMenuWillBecomeInvisible(e: PopupMenuEvent) {
+                    // Do nothing
+                }
+
+                override fun popupMenuCanceled(e: PopupMenuEvent) {
+                    // Do nothing
+                }
+            })
         }
     }
 }
