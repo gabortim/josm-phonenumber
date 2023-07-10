@@ -4,7 +4,7 @@ import java.net.URL
 
 plugins {
     id("org.openstreetmap.josm") version "0.8.2"
-    kotlin("jvm") version "1.8.22"
+    kotlin("jvm") version "1.9.0"
     jacoco
 }
 
