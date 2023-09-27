@@ -173,10 +173,10 @@ class PhoneNumberValidator : TagTest(
         }
         for (region in parsedNumbers.inWrongRegion) {
             errors.add(
-                TestError.builder(this, Severity.OTHER, WRONG_REGION)
+                TestError.builder(this, Severity.WARNING, WRONG_REGION)
                     .message(
                         tr("Phone number possibly in wrong region"),
-                        region
+                        region.ifEmpty { tr("<empty>") }
                     )
                     .primitives(primitive)
                     .build()
