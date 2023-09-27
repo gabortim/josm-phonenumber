@@ -97,7 +97,7 @@ class PhoneNumberValidator : TagTest(
     }
 
     override fun isPrimitiveUsable(p: OsmPrimitive): Boolean {
-        return p.isTagged && hasUsableKey(p)
+        return super.isPrimitiveUsable(p) && p.bBox.isValid && hasUsableKey(p)
     }
 
     override fun check(primitive: OsmPrimitive) {

@@ -158,8 +158,7 @@ internal object NumberFormatter {
     /**
      * Returns the region code for the specified number.
      */
-    private fun getRegionCode(phoneNumber: PhoneNumber): String {
-        // FIXME: the number should be valid, otherwise exception is thrown
+    private fun getRegionCode(phoneNumber: PhoneNumber): String? {
         return phoneNumberUtil.getRegionCodeForNumber(phoneNumber)
     }
 
