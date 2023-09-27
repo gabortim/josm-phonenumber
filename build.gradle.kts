@@ -30,8 +30,8 @@ repositories {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/gabortim/josm-libphonenumber")
         credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GH_PACKAGE_REPO_TOKEN")
+            username = System.getenv("GITHUB_ACTOR") ?: providers.gradleProperty("GITHUB_ACTOR").get()
+            password = System.getenv("GH_PACKAGE_REPO_TOKEN") ?: providers.gradleProperty("GH_PACKAGE_REPO_TOKEN").get()
         }
     }
 }

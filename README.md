@@ -33,6 +33,18 @@ Contributions are welcomed. When you encounter an issue
 or have an improvement idea, don't hesitate to report it to [GitHub](https://github.com/gabortim/josm-phonenumber/issues/new)
 or [JOSM Trac](https://josm.openstreetmap.de/newticket?component=Plugin%20phonenumber) :)
 
+I'd like to make the code more testable to extend the test coverage.
+
+### Project setup
+To be able to sync the project dependencies after cloning, you need a few extra steps, unfortunately.
+1. Go to your GitHub user profile dev settings: https://github.com/settings/tokens
+2. Generate a new **classic token** with `read:packages` permission.
+3. Create a `gradle.properties` file
+4. Add these lines to the file:
+   - ```properties
+     GITHUB_ACTOR=<your GH username>
+     GH_PACKAGE_REPO_TOKEN=<the newly generated token in step 2.>
+     ```
 ### Translation
 Download the latest `.pot` file from the CI/CD artefacts and translate it locally.
 After the translation is done, create a Merge Request with the file to the
