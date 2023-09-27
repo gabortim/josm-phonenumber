@@ -1,6 +1,6 @@
 package com.github.gabortim.phonenumber.test
 
-import com.github.gabortim.phonenumber.tool.PrimitiveGeocoder.getIso3166Code
+import com.github.gabortim.phonenumber.tool.PrimitiveGeocoder.getIso3166Alpha2Code
 import org.openstreetmap.josm.actions.ExpertToggleAction
 import org.openstreetmap.josm.actions.ExpertToggleAction.ExpertModeChangeListener
 import org.openstreetmap.josm.command.ChangePropertyCommand
@@ -101,7 +101,7 @@ class PhoneNumberValidator : TagTest(
     }
 
     override fun check(primitive: OsmPrimitive) {
-        parsedNumbers = PhoneNumber(primitive, getIso3166Code(primitive), forceContactSchemeProperty.get())
+        parsedNumbers = PhoneNumber(primitive, getIso3166Alpha2Code(primitive), forceContactSchemeProperty.get())
 
         if (parsedNumbers.processedNumbers.isEmpty()) return
 
@@ -188,7 +188,7 @@ class PhoneNumberValidator : TagTest(
         val commands: MutableList<Command> = ArrayList()
 
         for (primitive in testError.primitives) {
-            parsedNumbers = PhoneNumber(primitive, getIso3166Code(primitive), forceContactSchemeProperty.get())
+            parsedNumbers = PhoneNumber(primitive, getIso3166Alpha2Code(primitive), forceContactSchemeProperty.get())
 
             commands += ChangePropertyCommand(
                 setOf(primitive),
