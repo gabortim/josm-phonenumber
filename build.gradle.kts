@@ -47,7 +47,7 @@ val versionFile = "version.txt"
 
 josm {
     pluginName = "phonenumber"
-    josmCompileVersion = "18700"
+    josmCompileVersion = "18822"
     manifest {
         author = "gaben"
         description = "Gives the validator ability to verify and auto-fix incorrect phone numbers"
