@@ -78,6 +78,12 @@ class NumberFormatterTest {
             number = phoneNumberUtil.parseAndKeepRawInput("+36 62/424-805 / 612", region)
             assertEquals(format(number).first, "+36 62 424 805 ext. 612")
 
+            number = phoneNumberUtil.parseAndKeepRawInput("+36 62/424-805 # 612", region)
+            assertEquals(format(number).first, "+36 62 424 805 ext. 612")
+
+            number = phoneNumberUtil.parseAndKeepRawInput("+36 62/424-805 - 612", region)
+            assertEquals(format(number).first, "+36 62 424 805 ext. 612")
+
             number = phoneNumberUtil.parseAndKeepRawInput("+36 1 3408132", region)
             assertEquals(format(number).first, "+36 1 340 8132")
 
@@ -87,6 +93,21 @@ class NumberFormatterTest {
         } catch (e: NumberParseException) {
             e.printStackTrace()
             fail(e.message)
+        }
+    }
+
+    @Test
+    fun testFormatNumber_US() {
+        val region = "US"
+        try {
+            var number = phoneNumberUtil.parseAndKeepRawInput("931-647-1567", region)
+            assertEquals(format(number).first, "+1 931-647-1567")
+
+            number = phoneNumberUtil.parseAndKeepRawInput("1-615-371-9200", region)
+            assertEquals(format(number).first, "+1 615-371-9200")
+        } catch (e: NumberParseException) {
+            e.printStackTrace()
+            fail()
         }
     }
 
