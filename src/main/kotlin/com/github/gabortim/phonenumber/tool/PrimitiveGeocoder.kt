@@ -7,7 +7,8 @@ import org.openstreetmap.josm.tools.Territories
  * Provides a fast method for getting a primitive country ISO code.
  */
 internal object PrimitiveGeocoder {
-    private val countryCodes: MutableSet<String> = Territories.getKnownIso3166Codes()
+    // we are interested in ISO 3166 Alpha-2 codes only
+    private val countryCodes: Set<String> = Territories.getKnownIso3166Codes().map { it.take(2) }.toSet()
     private val nearbyCountryCodes: MutableSet<String> = HashSet(6)
 
     /**
@@ -51,10 +52,9 @@ internal object PrimitiveGeocoder {
     }
 
     /**
-     * Clears cache variables.
+     * Clears cached collected county codes. It is safe to call anytime.
      */
     fun clear() {
-        countryCodes.clear()
         nearbyCountryCodes.clear()
     }
 }
