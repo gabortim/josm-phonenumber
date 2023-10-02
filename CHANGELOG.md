@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Increased region check level to warning
 - Update Gradle to 8.3
+- Update Kotlin to 1.9.10
 - Bump JOSM compile version to r18822
 ### Fixed
 - `NullPointerException` while trying to get region code for a number (issue #7)
