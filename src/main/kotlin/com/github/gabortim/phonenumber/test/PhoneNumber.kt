@@ -39,45 +39,43 @@ class PhoneNumber(
      */
     private var prefix = ""
 
-    private val phoneNumberUtil = PhoneNumberUtil.getInstance()
-
     private val originalNumbers = HashMap<String, ArrayList<String>>(4)
     val processedNumbers = HashMap<String, LinkedHashSet<String>>(4)
 
     /**
      * Container for badly separated tags. Contains tag keys.
      */
-    val badSeparator = HashSet<String>(2)
+    val badSeparator by lazy { HashSet<String>(2) }
 
     /**
      * Container for numbers which are in the wrong region. Contains tag values.
      */
-    val inWrongRegion = HashSet<String>(2)
+    val inWrongRegion by lazy { HashSet<String>(2) }
 
     /**
      * Container for found premium numbers. Contains tag values.
      */
-    private val premiumNumber = HashSet<String>(2)
+    private val premiumNumber by lazy { HashSet<String>(2) }
 
     /**
      * Container for invalid numbers which libphonenumber couldn't parse. Contains tag values.
      */
-    val invalid = HashSet<String>(2)
+    val invalid by lazy { HashSet<String>(2) }
 
     /**
      * Container for too short (invalid) numbers. Contains tag values.
      */
-    val tooShort = HashSet<String>(2)
+    val tooShort by lazy { HashSet<String>(2) }
 
     /**
      * Container for numbers with unusual characters found in them. Contains tag values.
      */
-    val unusualChars = HashSet<String>(2)
+    val unusualChars by lazy { HashSet<String>(2) }
 
     /**
      * Container for not well-formatted numbers. Contains tag values.
      */
-    val notWellFormatted = HashSet<String>(2)
+    val notWellFormatted by lazy { HashSet<String>(2) }
 
     /**
      * Set to true if any of the tags modified -> beautifyable.
@@ -99,6 +97,10 @@ class PhoneNumber(
     init {
         splitTagValues()
         categorizeTags()
+    }
+
+    companion object {
+        private val phoneNumberUtil = PhoneNumberUtil.getInstance()
     }
 
     /**
