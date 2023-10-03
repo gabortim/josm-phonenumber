@@ -52,7 +52,7 @@ josm {
         author = "gaben"
         description = "Gives the validator ability to verify and auto-fix incorrect phone numbers"
         pluginDependencies.add("libphonenumber")
-        minJosmVersion = "17428"
+        minJosmVersion = "18475" // due to PatternUtils
         canLoadAtRuntime = true
         mainClass = "com.github.gabortim.phonenumber.PhoneNumberPlugin"
         iconPath = "images/icon.svg"

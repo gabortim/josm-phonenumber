@@ -15,6 +15,7 @@ import org.openstreetmap.josm.data.validation.TestError
 import org.openstreetmap.josm.tools.Destroyable
 import org.openstreetmap.josm.tools.GBC
 import org.openstreetmap.josm.tools.I18n.tr
+import org.openstreetmap.josm.tools.PatternUtils
 import javax.swing.JCheckBox
 import javax.swing.JPanel
 
@@ -59,7 +60,7 @@ class PhoneNumberValidator : TagTest(
          * @return true if the key contains usable key for the plugin. Includes number suffixed keys, like phone_1.
          */
         fun isKeyUsable(key: String): Boolean {
-            return usableKeys.any { s: String -> Regex("${s}(_\\d*)?").matches(key) }
+            return usableKeys.any { s: String -> PatternUtils.compile("${s}(_\\d*)?").matcher(key).matches() }
         }
     }
 

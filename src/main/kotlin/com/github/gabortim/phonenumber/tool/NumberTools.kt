@@ -1,5 +1,7 @@
 package com.github.gabortim.phonenumber.tool
 
+import org.openstreetmap.josm.tools.PatternUtils
+
 
 /**
  * This class contains various regex based methods.
@@ -12,7 +14,7 @@ internal object NumberTools {
      * @return Bool value if it contains those characters.
      */
     fun containsNonstandardChars(value: String): Boolean {
-        return value.contains(Regex("[^-/+0-9;() #]+")) && !value.contains("ext.")
+        return value.contains(PatternUtils.compile("[^-/+0-9;() #]+").toRegex()) && !value.contains("ext.")
     }
 
     /**
@@ -22,7 +24,7 @@ internal object NumberTools {
      * @return Boole value if it contains direct dial in number (DDI)
      */
     fun containsDDI(value: String): Boolean {
-        return value.contains(Regex("\\+?([0-9- ]){6,}[-/#][0-9 ]+\$"))
+        return value.contains(PatternUtils.compile("\\+?([0-9- ]){6,}[-/#][0-9 ]+\$").toRegex())
     }
 
     /**
@@ -32,12 +34,12 @@ internal object NumberTools {
      * If couldn't return, the input parameter returned in a String array.
      */
     fun splitByLastSeparator(number: String): Array<String> {
-        var splitNum = number.split(Regex("[-/#](?!.*[-/#])"))
+        var splitNum = number.split(PatternUtils.compile("[-/#](?!.*[-/#])"))
 
         if (splitNum.size < 2) {
             // if couldn't split by regular separators, split by last space char
             // needed for cases, like " / " used as a separator
-            splitNum = number.split(Regex(" (?!.* )"))
+            splitNum = number.split(PatternUtils.compile(" (?!.* )"))
         }
 
         if (splitNum.size < 2)

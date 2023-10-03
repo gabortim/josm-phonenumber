@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Gradle to 8.3
 - Update Kotlin to 1.9.10
 - Bump JOSM compile version to r18822
+- Cache regex patterns by using JOSM core PatternUtils (minimum required JOSM version is r18475)
 ### Fixed
 - `NullPointerException` while trying to get region code for a number (issue #7)
 - an issue related to JOSM internal territories ISO country code retrieval
