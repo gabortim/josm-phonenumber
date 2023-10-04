@@ -100,8 +100,7 @@ class PhoneNumberValidator : TagTest(
     override fun check(primitive: OsmPrimitive) {
         parsedNumbers = PhoneNumber(primitive, getIso3166Alpha2Code(primitive), forceContactSchemeProperty.get())
 
-        if (parsedNumbers.processedNumbers.isEmpty()) return
-
+        /// non autofixable errors
         for (key in parsedNumbers.badSeparator) {
             errors.add(
                 TestError.builder(this, Severity.ERROR, BAD_SEPARATOR)
@@ -157,23 +156,25 @@ class PhoneNumberValidator : TagTest(
                     .build()
             )
         }
-        if (parsedNumbers.isFixable()) {
-            errors.add(
-                TestError.builder(this, Severity.WARNING, MULTI)
-                    .message(
-                        tr("Phone number issues"),
-                        parsedNumbers.getValidatorDescription().joinToString()
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
-        }
         for (region in parsedNumbers.inWrongRegion) {
             errors.add(
                 TestError.builder(this, Severity.WARNING, WRONG_REGION)
                     .message(
                         tr("Phone number possibly in wrong region"),
                         region.ifEmpty { tr("<empty>") }
+                    )
+                    .primitives(primitive)
+                    .build()
+            )
+        }
+
+        /// autofixable warnings
+        if (parsedNumbers.isFixable()) {
+            errors.add(
+                TestError.builder(this, Severity.WARNING, MULTI)
+                    .message(
+                        tr("Phone number issues"),
+                        parsedNumbers.getValidatorDescription().joinToString()
                     )
                     .primitives(primitive)
                     .build()
