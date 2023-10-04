@@ -17,8 +17,8 @@ internal object NumberFormatter {
         /** No issues found. */
         NONE,
 
-        /** Contains invalid chars. */
-        INVALID_CHARS,
+        /** Contains unusual chars. */
+        UNUSUAL_CHARS,
 
         /** Parse error. */
         INVALID,
@@ -43,7 +43,7 @@ internal object NumberFormatter {
         if (containsNonstandardChars(phoneNumber.rawInput)) {
             // libphonenumber can accept format "+36 30 DUGULAS" as a valid format,
             // but deny those instead.
-            return Pair("", FailReason.INVALID_CHARS)
+            return Pair("", FailReason.UNUSUAL_CHARS)
         }
 
         // SHORT NUMBER VALIDATION
@@ -149,7 +149,7 @@ internal object NumberFormatter {
     /**
      * Formats the phone number to international format.
      *
-     * Ensures that everywhere the same formatting used.
+     * Ensures that everywhere the same formatting is used.
      */
     private fun formatNumber(phoneNumber: PhoneNumber): String {
         return phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)

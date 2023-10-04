@@ -32,9 +32,7 @@ const val TOO_FEW_GROUPING = 10606
 /** Value for batch error warnings and fixes */
 const val MULTI = 10607
 
-/**
- * Semicolon as the tag value separator.
- */
+/** Semicolon as the tag value separator. */
 const val SEP = ';'
 
 
@@ -64,9 +62,7 @@ class PhoneNumberValidator : TagTest(
         }
     }
 
-    /**
-     * JOSM registry setting prefix for the plugin preferences.
-     */
+    /** JOSM registry setting prefix for the plugin preferences. */
     private val prefix = ValidatorPrefHelper.PREFIX + "." + PhoneNumberValidator::class.java.simpleName
 
     private val autofixProperty = BooleanProperty("$prefix.autofix", false)

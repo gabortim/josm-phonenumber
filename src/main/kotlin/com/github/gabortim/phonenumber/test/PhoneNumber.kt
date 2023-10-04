@@ -146,7 +146,7 @@ class PhoneNumber(
                             if (number != formatted.first)
                                 isBeautifyable = true
                         }
-                        FailReason.INVALID_CHARS -> unusualChars.add(number)
+                        FailReason.UNUSUAL_CHARS -> unusualChars.add(number)
                         FailReason.INVALID -> invalid.add(number)
                         FailReason.TOO_SHORT -> tooShort.add(number)
                         FailReason.PREMIUM -> premiumNumber.add(number)
@@ -238,7 +238,9 @@ class PhoneNumber(
     }
 
     /**
-     * Returns the validator description for warning level-fixable issues.
+     * Returns the validator description of auto-fixable issues.
+     *
+     * @return an array of auto-fixable issue messages
      */
     fun getValidatorDescription(): ArrayList<String> {
         val description = arrayListOf<String>()
