@@ -83,6 +83,11 @@ class PhoneNumber(
     var isBeautifyable = false
 
     /**
+     * Set to true if any of the values formatted.
+     */
+    var isFormatted = false
+
+    /**
      * True if any of the tags switched class e.g. phone -> mobile,
      * but ignoring the contact: prefix, e.g. phone -> contact:phone.
      */
@@ -114,7 +119,13 @@ class PhoneNumber(
             if (tag.value.contains(','))
                 badSeparator.add(tag.key)
 
-            originalNumbers[tag.key] = splitAndStrip(tag.value) as ArrayList<String>
+            val splitValues = splitAndStrip(tag.value) as ArrayList<String>
+
+            if (!tag.value.equals(splitValues.joinToString(SEP.toString()))) {
+                isBeautifyable = true
+            }
+
+            originalNumbers[tag.key] = splitValues
         }
     }
 
@@ -144,7 +155,7 @@ class PhoneNumber(
                                 addEntry("phone", formatted.first, tag.key)
 
                             if (number != formatted.first)
-                                isBeautifyable = true
+                                isFormatted = true
                         }
                         FailReason.UNUSUAL_CHARS -> unusualChars.add(number)
                         FailReason.INVALID -> invalid.add(number)
@@ -234,7 +245,7 @@ class PhoneNumber(
     }
 
     fun isFixable(): Boolean {
-        return hasDuplicates() || hasPremiumNumber() || hasWrongSeparator() || isBeautifyable || hasSwitchedClass || hasSchemaChange
+        return hasDuplicates() || hasPremiumNumber() || hasWrongSeparator() || isFormatted || isBeautifyable || hasSwitchedClass || hasSchemaChange
     }
 
     /**
@@ -251,8 +262,10 @@ class PhoneNumber(
             description.add(
                 trn("premium rate number", "premium rate numbers", premiumNumber.size.toLong())
             )
-        if (isBeautifyable)
+        if (isFormatted)
             description.add(tr("not in E.123 format"))
+        else if (isBeautifyable)
+            description.add(tr("beatuifyable value"))
         if (hasSwitchedClass)
             description.add(tr("inappropriate key"))
         if (hasSchemaChange)
