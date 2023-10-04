@@ -140,7 +140,6 @@ class PhoneNumber(
                 try {
                     val parsed = phoneNumberUtil.parseAndKeepRawInput(number, region)
                     val formatted = NumberFormatter.format(parsed)
-                    val numberType = phoneNumberUtil.getNumberType(parsed)
 
                     if (region != phoneNumberUtil.getRegionCodeForNumber(parsed))
                         inWrongRegion.add(formatted.first)
@@ -149,7 +148,7 @@ class PhoneNumber(
                         FailReason.NONE -> {
                             if ("fax" in tag.key.lowercase())
                                 addEntry("fax", formatted.first, tag.key)
-                            else if (numberType == PhoneNumberType.MOBILE)
+                            else if (phoneNumberUtil.getNumberType(parsed) == PhoneNumberType.MOBILE)
                                 addEntry("mobile", formatted.first, tag.key)
                             else
                                 addEntry("phone", formatted.first, tag.key)
@@ -184,7 +183,7 @@ class PhoneNumber(
      * @param oldKey the old key used to detect schema and class phone type change
      */
     private fun addEntry(key: String, value: String, oldKey: String) {
-        processedNumbers.getOrPut(prefix + key) { linkedSetOf() }.add(value)
+        processedNumbers.getOrPut(prefix + key.substringAfter(CONTACT_SCHEME_PREFIX)) { linkedSetOf() }.add(value)
 
         // detect class change
         if (oldKey.substringAfter(CONTACT_SCHEME_PREFIX) != key.substringAfter(CONTACT_SCHEME_PREFIX))
