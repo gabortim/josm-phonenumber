@@ -6,6 +6,7 @@ import com.github.gabortim.phonenumber.tool.NumberTools.splitAndStrip
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType
+import com.google.i18n.phonenumbers.Phonenumber
 import org.openstreetmap.josm.data.osm.OsmPrimitive
 import org.openstreetmap.josm.data.osm.TagMap
 import org.openstreetmap.josm.tools.I18n.tr
@@ -40,7 +41,7 @@ class PhoneNumber(
     private var prefix = ""
 
     private val originalNumbers = HashMap<String, ArrayList<String>>(4)
-    val processedNumbers = HashMap<String, LinkedHashSet<String>>(4)
+    private val processedNumbers = HashMap<String, LinkedHashSet<String>>(4)
 
     /**
      * Container for badly separated tags. Contains tag keys.
@@ -80,24 +81,24 @@ class PhoneNumber(
     /**
      * Set to true if any of the tags modified -> beautifyable.
      */
-    var isBeautifyable = false
+    private var isBeautifyable = false
 
     /**
      * Set to true if any of the values formatted.
      */
-    var isFormatted = false
+    private var isFormatted = false
 
     /**
      * True if any of the tags switched class e.g. phone -> mobile,
      * but ignoring the contact: prefix, e.g. phone -> contact:phone.
      */
-    var hasSwitchedClass = false
+    private var hasSwitchedClass = false
 
     /**
      * True if any of the tags switched to the contact: prefix
      * scheme, e.g. phone -> contact:phone.
      */
-    var hasSchemaChange = false
+    private var hasSchemaChange = false
 
     init {
         splitTagValues()
@@ -133,12 +134,14 @@ class PhoneNumber(
      * Separate numbers into phone=* and mobile=* tags.
      */
     private fun categorizeTags() {
+        val parsed: Phonenumber.PhoneNumber = Phonenumber.PhoneNumber()
+
         // iterate over values
         for (tag in originalNumbers.entries) {
             // iterate over keys
             for (number in tag.value) {
                 try {
-                    val parsed = phoneNumberUtil.parseAndKeepRawInput(number, region)
+                    phoneNumberUtil.parseAndKeepRawInput(number, region, parsed)
                     val formatted = NumberFormatter.format(parsed)
 
                     if (region != phoneNumberUtil.getRegionCodeForNumber(parsed))
