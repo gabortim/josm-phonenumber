@@ -1,4 +1,4 @@
-package com.github.gabortim.phonenumber
+package com.github.gabortim.phonenumber.tool
 
 import com.github.gabortim.phonenumber.tool.NumberFormatter.format
 import com.github.gabortim.phonenumber.tool.NumberFormatter.isEmergency

@@ -1,4 +1,4 @@
-package com.github.gabortim.phonenumber
+package com.github.gabortim.phonenumber.tool
 
 import com.github.gabortim.phonenumber.tool.NumberTools.containsDDI
 import com.github.gabortim.phonenumber.tool.NumberTools.containsNonstandardChars

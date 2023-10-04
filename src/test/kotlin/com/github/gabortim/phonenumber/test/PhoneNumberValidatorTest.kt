@@ -1,6 +1,5 @@
-package com.github.gabortim.phonenumber
+package com.github.gabortim.phonenumber.test
 
-import com.github.gabortim.phonenumber.test.PhoneNumberValidator
 import org.openstreetmap.josm.data.osm.DataSet
 import org.openstreetmap.josm.data.osm.Node
 import org.openstreetmap.josm.data.osm.OsmPrimitive
