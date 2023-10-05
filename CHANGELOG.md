@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.4] - 2023-XX-XX Unreleased
+## [1.1.0] - 2023-10-05
 ### Added
-- New validator message in case no (auto-fixable) formatting issue found (5753d834)
+- New validator message in case no (auto-fixable) formatting issue found
 ### Changed
 - Increased region check level to warning
 - Update Gradle to 8.3
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - `NullPointerException` while trying to get region code for a number (issue #7)
 - An issue related to JOSM internal territories ISO country code retrieval
-- A possible double contact: prefix issue (8b4f23cd)
+- A possible double contact: prefix issue
 
 ## [1.0.3] - 2023-06-15
 ### Changed
