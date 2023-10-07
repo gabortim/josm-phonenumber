@@ -159,6 +159,7 @@ class PhoneNumber(
                             if (number != formatted.first)
                                 isFormatted = true
                         }
+
                         FailReason.UNUSUAL_CHARS -> unusualChars.add(number)
                         FailReason.INVALID -> invalid.add(number)
                         FailReason.TOO_SHORT -> tooShort.add(number)
@@ -240,12 +241,15 @@ class PhoneNumber(
     }
 
     /**
-     * Replies true if any of the phone numbers has separator issue.
+     * Returns true if any of the phone numbers has separator issue.
      */
     private fun hasWrongSeparator(): Boolean {
         return badSeparator.isNotEmpty()
     }
 
+    /**
+     * Returns true if the primitive is fixable.
+     */
     fun isFixable(): Boolean {
         return hasDuplicates() || hasPremiumNumber() || hasWrongSeparator() || isFormatted || isBeautifyable || hasSwitchedClass || hasSchemaChange
     }
@@ -267,7 +271,7 @@ class PhoneNumber(
         if (isFormatted)
             description.add(tr("not in E.123 format"))
         else if (isBeautifyable)
-            description.add(tr("beatuifyable value"))
+            description.add(tr("beautifiable value"))
         if (hasSwitchedClass)
             description.add(tr("inappropriate key"))
         if (hasSchemaChange)

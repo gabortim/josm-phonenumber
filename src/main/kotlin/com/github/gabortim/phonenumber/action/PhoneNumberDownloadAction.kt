@@ -1,5 +1,6 @@
 package com.github.gabortim.phonenumber.action
 
+import com.github.gabortim.phonenumber.task.PhoneNumberDownloadTask
 import org.openstreetmap.josm.actions.JosmAction
 import org.openstreetmap.josm.data.Bounds
 import org.openstreetmap.josm.gui.MainApplication

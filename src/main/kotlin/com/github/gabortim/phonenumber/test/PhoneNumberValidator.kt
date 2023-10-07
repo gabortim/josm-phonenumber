@@ -101,17 +101,6 @@ class PhoneNumberValidator : TagTest(
         parsedNumbers = PhoneNumber(primitive, getIso3166Alpha2Code(primitive), forceContactSchemeProperty.get())
 
         /// non autofixable errors
-        for (key in parsedNumbers.badSeparator) {
-            errors.add(
-                TestError.builder(this, Severity.ERROR, BAD_SEPARATOR)
-                    .message(
-                        tr("Phone number invalid"),
-                        tr("wrong separator used in {0} key", key)
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
-        }
         for (value in parsedNumbers.invalid) {
             errors.add(
                 TestError.builder(this, Severity.ERROR, PARSE_ERROR)
@@ -169,7 +158,19 @@ class PhoneNumberValidator : TagTest(
         }
 
         /// autofixable warnings
-        if (parsedNumbers.isFixable()) {
+        for (key in parsedNumbers.badSeparator) {
+            errors.add(
+                TestError.builder(this, Severity.ERROR, BAD_SEPARATOR)
+                    .message(
+                        tr("Phone number invalid"),
+                        tr("wrong separator used in {0} key", key)
+                    )
+                    .primitives(primitive)
+                    .build()
+            )
+        }
+        // avoid duplicate warning
+        if (parsedNumbers.isFixable() && parsedNumbers.badSeparator.isEmpty()) {
             errors.add(
                 TestError.builder(this, Severity.WARNING, MULTI)
                     .message(

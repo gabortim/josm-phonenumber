@@ -74,27 +74,31 @@ fun getGitHash(): String {
 }
 
 dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     packIntoJar(kotlin("stdlib"))
 
     implementation("org.openstreetmap.josm.plugins:libphonenumber:8.+") { isChanging = true }
 
-    testImplementation("org.testng:testng") {
-        version {
-            strictly("7.5")
-            because("TestNG 7.6 and up requires Java 11 or newer")
-        }
-    }
+    // fix test runtime issue
+    // https://mvnrepository.com/artifact/org.wiremock/wiremock-standalone
+    testImplementation("org.wiremock:wiremock-standalone:3.2.0")
+    testImplementation(kotlin("reflect"))
+
+    val junit = "5.9.3"
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
+    testImplementation("org.openstreetmap.josm:josm-unittest:SNAPSHOT") { isChanging = true }
 }
 
 tasks.test {
-    useTestNG()
+    useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
     reports {
-        xml.required.set(true)
+        xml.required = true
     }
 }
 

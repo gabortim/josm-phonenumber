@@ -1,4 +1,4 @@
-package com.github.gabortim.phonenumber.action
+package com.github.gabortim.phonenumber.task
 
 import com.github.gabortim.phonenumber.test.PhoneNumberValidator
 import org.openstreetmap.josm.data.Bounds

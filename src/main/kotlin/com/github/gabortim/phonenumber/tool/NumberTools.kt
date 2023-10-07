@@ -57,7 +57,7 @@ internal object NumberTools {
      * @return Split string in an array
      */
     fun splitAndStrip(value: String): Collection<String> {
-        return value.split(Regex("[,;]"))
+        return value.split(PatternUtils.compile("[,;]"))
             .filter(String::isNotBlank)
             .map(String::trim)
     }
