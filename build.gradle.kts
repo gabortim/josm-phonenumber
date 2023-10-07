@@ -79,8 +79,8 @@ dependencies {
     implementation("org.openstreetmap.josm.plugins:libphonenumber:8.+") { isChanging = true }
 
     // fix test runtime issue
-    // https://mvnrepository.com/artifact/org.wiremock/wiremock-standalone
-    testImplementation("org.wiremock:wiremock-standalone:3.2.0")
+    // https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock-jre8
+    testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.1")
     testImplementation(kotlin("reflect"))
 
     val junit = "5.9.3"

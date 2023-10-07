@@ -22,6 +22,12 @@ compile-jdk17:
   script:
     - ./gradlew build
 
+compile-jdk21:
+  stage: verify
+  image: amd64/openjdk:21-jdk-bullseye
+  script:
+    - ./gradlew build
+
 test:
   stage: validate
   image: amd64/openjdk:11-jdk-bullseye
