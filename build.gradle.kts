@@ -80,7 +80,7 @@ dependencies {
 
     // fix test runtime issue
     // https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock-jre8
-    testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.1")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:3.0.1")
     testImplementation(kotlin("reflect"))
 
     val junit = "5.9.3"
