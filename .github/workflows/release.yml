@@ -28,7 +28,7 @@ jobs:
           distribution: 'zulu'
           architecture: 'x64'
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
       - name: Run test
         run: ./gradlew check
         env:
@@ -51,7 +51,7 @@ jobs:
       - name: Install gettext
         run: sudo apt-get install -y gettext
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
       - name: Execute Gradle build
         run: ./gradlew dist generatePot
         env:
