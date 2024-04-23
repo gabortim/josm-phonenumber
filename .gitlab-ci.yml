@@ -4,12 +4,6 @@ stages:
   - visualize
   - package
 
-compile-jdk8:
-  stage: verify
-  image: amd64/openjdk:8-jdk-bullseye
-  script:
-    - ./gradlew build
-
 compile-jdk11:
   stage: verify
   image: amd64/openjdk:11-jdk-bullseye
@@ -43,7 +37,7 @@ test:
 
 coverage:
   stage: visualize
-  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.9
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.10
   script:
     - python /opt/cover2cover.py build/reports/jacoco/test/jacocoTestReport.xml $CI_PROJECT_DIR/src/main/kotlin/ > build/cobertura.xml
   needs: [ "test" ]

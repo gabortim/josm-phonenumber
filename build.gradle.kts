@@ -1,27 +1,17 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
-import java.net.URL
+import java.net.URI
 
 plugins {
     id("org.openstreetmap.josm") version "0.8.2"
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "1.9.23"
     jacoco
 }
 
-// Gradle toolchain does not allow compiling with JDK11 in Java 8 compatibility mode.
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
-}
-
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
-}
-
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.AZUL
+    }
 }
 
 repositories {
@@ -47,16 +37,17 @@ val versionFile = "version.txt"
 
 josm {
     pluginName = "phonenumber"
-    josmCompileVersion = "18822"
+    josmCompileVersion = "19039"
     manifest {
         author = "gaben"
         description = "Gives the validator ability to verify and auto-fix incorrect phone numbers"
         pluginDependencies.add("libphonenumber")
         minJosmVersion = "18475" // due to PatternUtils
+        minJavaVersion = 17
         canLoadAtRuntime = true
         mainClass = "com.github.gabortim.phonenumber.PhoneNumberPlugin"
         iconPath = "images/icon.svg"
-        website = URL("https://github.com/gabortim/josm-phonenumber")
+        website = URI("https://github.com/gabortim/josm-phonenumber").toURL()
     }
 }
 
@@ -78,12 +69,11 @@ dependencies {
 
     implementation("org.openstreetmap.josm.plugins:libphonenumber:8.+") { isChanging = true }
 
-    // fix test runtime issue
-    // https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock-jre8
-    testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.1")
+    // https://mvnrepository.com/artifact/org.wiremock/wiremock
+    testImplementation("org.wiremock:wiremock:3.5.4")
     testImplementation(kotlin("reflect"))
 
-    val junit = "5.9.3"
+    val junit = "5.10.2"
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit}")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
     testImplementation("org.openstreetmap.josm:josm-unittest:SNAPSHOT") { isChanging = true }
