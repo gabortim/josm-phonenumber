@@ -9,9 +9,12 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.AZUL
+        languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+tasks.compileJava {
+    options.release = 17
 }
 
 repositories {

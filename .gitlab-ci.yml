@@ -4,12 +4,6 @@ stages:
   - visualize
   - package
 
-compile-jdk11:
-  stage: verify
-  image: amd64/openjdk:11-jdk-bullseye
-  script:
-    - ./gradlew build
-
 compile-jdk17:
   stage: verify
   image: amd64/openjdk:17-jdk-bullseye
@@ -24,10 +18,10 @@ compile-jdk21:
 
 test:
   stage: validate
-  image: amd64/openjdk:11-jdk-bullseye
+  image: amd64/openjdk:17-jdk-bullseye
   script:
     - ./gradlew check jacocoTestReport
-  needs: [ "compile-jdk11" ]
+  needs: [ "compile-jdk17" ]
   artifacts:
     reports:
       junit: build/test-results/test/**/TEST-*.xml
@@ -50,7 +44,7 @@ coverage:
 
 jar:
   stage: package
-  image: amd64/openjdk:11-jdk-bullseye
+  image: amd64/openjdk:17-jdk-bullseye
   script:
     - apt-get update
     - apt-get install -y gettext
