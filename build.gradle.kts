@@ -3,7 +3,7 @@ import java.net.URI
 
 plugins {
     id("org.openstreetmap.josm") version "0.8.2"
-    kotlin("jvm") version "1.9.23"
+    kotlin("jvm") version "1.9.24"
     jacoco
 }
 
@@ -37,7 +37,7 @@ val versionFile = "version.txt"
 
 josm {
     pluginName = "phonenumber"
-    josmCompileVersion = "19039"
+    josmCompileVersion = "19207"
     manifest {
         author = "gaben"
         description = "Gives the validator ability to verify and auto-fix incorrect phone numbers"

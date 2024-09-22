@@ -21,6 +21,8 @@ The plugin gives the JOSM validator many tests and quick fixes:
 ## Installation
 Download the **phonenumber** plugin from JOSM as usual.
 
+Requires Java 17+.
+
 ## Usage
 Just run the validator, the messages will pop up.
 
@@ -42,7 +44,7 @@ To be able to sync the project dependencies after cloning, you need a few extra 
 3. Create a `gradle.properties` file
 4. Add these lines to the file:
    - ```properties
-     GITHUB_ACTOR=<your GH username>
+     GH_ACTOR=<your GH username>
      GH_PACKAGE_REPO_TOKEN=<the newly generated token in step 2.>
      ```
 ### Translation
