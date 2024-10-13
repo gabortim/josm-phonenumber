@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.ByteArrayOutputStream
 import java.net.URI
 
@@ -7,14 +8,15 @@ plugins {
     jacoco
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+// Gradle toolchain does not allow compiling with JDK11 in Java 8 compatibility mode.
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_21.toString()
 }
 
-tasks.compileJava {
-    options.release = 17
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_21.toString()
 }
 
 repositories {
