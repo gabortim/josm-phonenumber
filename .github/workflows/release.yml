@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  JAVA_VERSION: 21
+
 jobs:
   validation:
     name: Gradle Wrapper validation
@@ -21,10 +24,10 @@ jobs:
     needs: validation
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 21
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
           architecture: 'x64'
       - name: Setup Gradle
@@ -40,10 +43,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 21
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
           architecture: 'x64'
       - name: Update apt repository index
