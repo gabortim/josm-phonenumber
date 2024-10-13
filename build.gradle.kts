@@ -76,7 +76,7 @@ dependencies {
     testImplementation("org.wiremock:wiremock:3.5.4")
     testImplementation(kotlin("reflect"))
 
-    val junit = "5.10.2"
+    val junit = "5.11.2"
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit}")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
     testImplementation("org.openstreetmap.josm:josm-unittest:SNAPSHOT") { isChanging = true }
