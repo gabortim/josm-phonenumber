@@ -11,12 +11,12 @@ plugins {
 // Gradle toolchain does not allow compiling with JDK11 in Java 8 compatibility mode.
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_21.toString()
+    jvmTarget = JavaVersion.VERSION_11.toString()
 }
 
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_21.toString()
+    jvmTarget = JavaVersion.VERSION_11.toString()
 }
 
 repositories {
