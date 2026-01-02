@@ -54,7 +54,6 @@ sourceSets {
 }
 
 version = pluginVersion
-val versionFile = "version.txt"
 
 josm {
     pluginName = "phonenumber"
@@ -108,21 +107,8 @@ tasks.jacocoTestCoverageVerification {
     dependsOn(tasks.jacocoTestReport)
 }
 
-tasks.register("storeVersion") {
-    // doLast is needed for the cleanup task
-    doLast {
-        File(versionFile).writeText("$version")
-    }
-}
-
 tasks.jar {
     from("images/**")
     from("README.md")
     from("LICENSE")
-
-    dependsOn("storeVersion")
-}
-
-tasks.clean {
-    delete(versionFile)
 }

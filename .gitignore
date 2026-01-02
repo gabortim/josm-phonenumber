@@ -5,4 +5,4 @@
 build
 .idea
 
-version.txt
+gradle.properties

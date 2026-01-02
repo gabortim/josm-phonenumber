@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Save version to an environment variable
         id: version_info
-        run: echo PLUGIN_VERSION="$(cat version.txt)" >> $GITHUB_OUTPUT
+        run: echo PLUGIN_VERSION=$(grep "^pluginVersion=" gradle.properties | cut -d'=' -f2) >> $GITHUB_OUTPUT
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
