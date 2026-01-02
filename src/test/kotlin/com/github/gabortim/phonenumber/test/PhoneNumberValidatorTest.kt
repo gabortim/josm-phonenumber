@@ -181,6 +181,30 @@ class PhoneNumberValidatorTest {
         assertTrue("separator" in validator.errors[0].description)
     }
 
+    @Test
+    fun testRaiseWarningUnusualChars() {
+        val node = Node(latLonHungary)
+        val tags = TagMap("contact:phone", "+36 30 DUGULAS")
+        node.setKeys(tags)
+        ds.addPrimitive(node)
+
+        validator.check(node)
+        assertEquals(1, validator.errors.size)
+        // TestError.message is actually the tr("Phone number invalid")
+    }
+
+    @Test
+    fun testMultipleIssues() {
+        val node = Node(latLonHungary)
+        // bad separator, beautifiable (extra space)
+        val tags = TagMap("phone", "+36 70 000 0000 , +36 70 000 0001")
+        node.setKeys(tags)
+        ds.addPrimitive(node)
+
+        validator.check(node)
+        assertEquals(1, validator.errors.size)
+    }
+
     private fun setAutofixProperty(value: Boolean) {
         // use reflection to set autofix to true
         val autofix = validator.javaClass.getDeclaredField("autofixProperty")

@@ -126,7 +126,7 @@ internal object NumberFormatter {
     /**
      * Fast implementation for counting grouping characters.
      */
-    private fun getGroupingCharsCount(number: String): Int {
+    fun getGroupingCharsCount(number: String): Int {
         // TODO: check "ext." too!
         return number.count { it == ' ' || it == '#' || it == '-' || it == '/' }
     }

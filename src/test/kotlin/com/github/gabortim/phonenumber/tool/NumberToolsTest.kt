@@ -4,7 +4,6 @@ import com.github.gabortim.phonenumber.tool.NumberTools.containsDDI
 import com.github.gabortim.phonenumber.tool.NumberTools.containsNonstandardChars
 import com.github.gabortim.phonenumber.tool.NumberTools.splitAndStrip
 import com.github.gabortim.phonenumber.tool.NumberTools.splitByLastSeparator
-import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -17,13 +16,18 @@ class NumberToolsTest {
     @Test
     fun testContainsNonstandardChars() {
         assertFalse(containsNonstandardChars("+43 50 5333-6630"))
+        assertFalse(containsNonstandardChars("+36 1 123 4567 ext. 123"))
+        assertFalse(containsNonstandardChars("+36 (1) 123-4567"))
+        assertFalse(containsNonstandardChars("+36 1 123;4567"))
+        assertFalse(containsNonstandardChars("+36 1 123/4567"))
+
         assertTrue(containsNonstandardChars("+36 30 DUGULAS"))
+        assertTrue(containsNonstandardChars("+36 1 123 4567?"))
     }
 
     @Test
     @Disabled("Until a better DDI heuristic found")
     fun testContainsDDI() {
-        // False
         assertFalse(containsDDI("+49 7751 3324"))
         assertFalse(containsDDI("(62)426483"))
         assertFalse(containsDDI("+49 7525 60150"))
@@ -31,7 +35,6 @@ class NumberToolsTest {
         // FIXME: re-enable test with a better DDI heuristic
         assertFalse(containsDDI("+36 30 / 633 0961"))
 
-        // True
         assertTrue(containsDDI("+36 90 317 282/256"))
         assertTrue(containsDDI("+43 5574 87278 88"))
         assertTrue(containsDDI("+43 5572 27505 723"))
@@ -52,6 +55,16 @@ class NumberToolsTest {
         numbers = splitAndStrip("(+36-1) 465-2010; (+36-1) 465-2016; (+36-1) 465-2017;")
         numbersRef = arrayListOf("(+36-1) 465-2010", "(+36-1) 465-2016", "(+36-1) 465-2017")
         assertEquals(numbersRef, numbers)
+
+        numbers = splitAndStrip("  +36 1 123 4567  ,  +36 1 765 4321  ")
+        numbersRef = arrayListOf("+36 1 123 4567", "+36 1 765 4321")
+        assertEquals(numbersRef, numbers)
+
+        numbers = splitAndStrip("")
+        assertTrue(numbers.isEmpty())
+
+        numbers = splitAndStrip("  ;  ,  ")
+        assertTrue(numbers.isEmpty())
     }
 
     @Test

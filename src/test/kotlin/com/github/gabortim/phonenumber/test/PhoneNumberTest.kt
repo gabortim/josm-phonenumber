@@ -1,5 +1,6 @@
 package com.github.gabortim.phonenumber.test
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -30,5 +31,51 @@ class PhoneNumberTest {
         node.setKeys(tags)
 
         assertTrue(PhoneNumber(node, "HU", true).isFixable())
+    }
+
+    @Test
+    fun testPremiumNumber() {
+        val node = Node(LatLon.ZERO)
+        val tags = TagMap("phone", "+36 90 317 282")
+        node.setKeys(tags)
+
+        val pn = PhoneNumber(node, "HU", false)
+        assertTrue(pn.isFixable())
+        assertTrue(pn.getValidatorDescription().contains("premium rate number"))
+    }
+
+    @Test
+    fun testWrongSeparator() {
+        val node = Node(LatLon.ZERO)
+        val tags = TagMap("phone", "+36 1 123 4567, +36 1 123 4568")
+        node.setKeys(tags)
+
+        val pn = PhoneNumber(node, "HU", false)
+        assertTrue(pn.isFixable())
+        assertTrue(pn.badSeparator.contains("phone"))
+    }
+
+    @Test
+    fun testSchemaChange() {
+        val node = Node(LatLon.ZERO)
+        val tags = TagMap("phone", "+36 1 123 4567")
+        node.setKeys(tags)
+
+        val pn = PhoneNumber(node, "HU", true)
+        assertTrue(pn.isFixable())
+        assertTrue(pn.getValidatorDescription().contains("contact: prefix scheme recommended"))
+    }
+
+    @Test
+    fun testInappropriateKey() {
+        val node = Node(LatLon.ZERO)
+        val tags = TagMap("phone", "+36 70 123 4567") // This is a mobile number in HU
+        node.setKeys(tags)
+
+        val pn = PhoneNumber(node, "HU", false)
+        assertTrue(pn.isFixable())
+        assertTrue(pn.getValidatorDescription().contains("inappropriate key"))
+        assertEquals("+36 70 123 4567", pn.getAsMap()["mobile"])
+        assertEquals("", pn.getAsMap()["phone"])
     }
 }

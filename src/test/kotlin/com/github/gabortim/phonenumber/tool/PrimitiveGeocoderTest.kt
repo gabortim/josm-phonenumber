@@ -37,6 +37,15 @@ class PrimitiveGeocoderTest {
     }
 
     @Test
+    fun testGetIso3166Alpha2Code_unknownLocation() {
+        val latLonOcean = LatLon(0.0, 0.0) // somewhere in the ocean
+        val primitive = Node(latLonOcean)
+
+        val isoCode = PrimitiveGeocoder.getIso3166Alpha2Code(primitive)
+        assertEquals("", isoCode)
+    }
+
+    @Test
     fun testClear() {
         val latLonHungary = LatLon(46.7079, 19.3799)   // somewhere in Hungary
         val primitive = Node(latLonHungary)
