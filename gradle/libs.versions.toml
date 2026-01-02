@@ -1,0 +1,18 @@
+[versions]
+josm-plugin = "0.8.2"
+kotlin = "1.9.24"
+wiremock = "3.5.4"
+junit = "5.10.2"
+
+[plugins]
+josm = { id = "org.openstreetmap.josm", version.ref = "josm-plugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+libphonenumber = { module = "org.openstreetmap.josm.plugins:libphonenumber", version = "9.+" }
+wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+josm-unittest = { module = "org.openstreetmap.josm:josm-unittest", version = "SNAPSHOT" }
