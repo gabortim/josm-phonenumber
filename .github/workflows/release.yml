@@ -23,6 +23,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Validate SemVer
+        id: semver
+        shell: bash
+        run: |
+          # strip the leading 'v' if present (v1.0.0 -> 1.0.0)
+          VERSION=${GITHUB_REF_NAME#v}
+          echo "Validating version: $VERSION"
+
+          # Major.Minor.Patch (Stable)
+          STABLE_PATTERN="^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$"
+
+          # Major.Minor.Patch-Prerelease (Prerelease)
+          PRE_PATTERN="^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-((0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*)$"
+
+          if [[ "$VERSION" =~ $STABLE_PATTERN ]]; then
+            echo "✅ Version $VERSION is STABLE."
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          elif [[ "$VERSION" =~ $PRE_PATTERN ]]; then
+            echo "⚠️ Version $VERSION is a PRERELEASE."
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Error: Version $VERSION does not strictly follow SemVer (https://semver.org)."
+            exit 1
+          fi
+
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v5
         with:
@@ -52,6 +77,7 @@ jobs:
           generate_release_notes: true
           body: For summarised changes, see [CHANGELOG.md](CHANGELOG.md).
           fail_on_unmatched_files: true
+          prerelease: ${{ steps.semver.outputs.is_prerelease }}
           files: |
             build/dist/*.jar
             build/i18n/pot/*.pot
