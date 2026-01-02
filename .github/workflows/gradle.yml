@@ -27,7 +27,7 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build
         env:
-          GH_PACKAGE_REPO_TOKEN: ${{ secrets.GH_PACKAGE_REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test:
     runs-on: ubuntu-latest
     needs: compile
@@ -44,4 +44,4 @@ jobs:
       - name: Run test
         run: ./gradlew check
         env:
-          GH_PACKAGE_REPO_TOKEN: ${{ secrets.GH_PACKAGE_REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

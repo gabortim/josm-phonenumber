@@ -41,12 +41,13 @@ I'd like to make the code more testable to extend the test coverage.
 To be able to sync the project dependencies after cloning, you need a few extra steps, unfortunately.
 1. Go to your GitHub user profile dev settings: https://github.com/settings/tokens
 2. Generate a new **classic token** with `read:packages` permission.
-3. Create a `gradle.properties` file
+3. Create a `gradle.properties` file in the project root
 4. Add these lines to the file:
    - ```properties
-     GH_ACTOR=<your GH username>
-     GH_PACKAGE_REPO_TOKEN=<the newly generated token in step 2.>
+     GITHUB_ACTOR=<your GitHub username>
+     GITHUB_PACKAGE_REPO_TOKEN=<the newly generated token in step 2.>
      ```
+
 ### Translation
 Download the latest `.pot` file from the CI/CD artefacts and translate it locally.
 After the translation is done, create a Merge Request with the file to the
