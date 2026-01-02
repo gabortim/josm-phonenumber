@@ -1,8 +1,8 @@
 [versions]
 josm-plugin = "0.8.2"
-kotlin = "1.9.24"
-wiremock = "3.5.4"
-junit = "5.10.2"
+kotlin = "1.9.25"
+wiremock = "3.13.2"
+junit = "5.11.4"
 
 [plugins]
 josm = { id = "org.openstreetmap.josm", version.ref = "josm-plugin" }
