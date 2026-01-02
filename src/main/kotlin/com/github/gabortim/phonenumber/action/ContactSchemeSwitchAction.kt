@@ -40,22 +40,15 @@ class ContactSchemeSwitchAction :
     override fun actionPerformed(actionEvent: ActionEvent) {
         val primitives = MainApplication.getLayerManager().editDataSet.selected
 
-        val propChangeCmds = ArrayList<ChangePropertyCommand>()
-
-        for (primitive in primitives) {
-            for (key in usableKeys) {
-                if (primitive.hasKey(key)) {
-                    // use new key with prefix
-                    val result = merge(primitive, key)
-
-                    propChangeCmds.add(ChangePropertyCommand(listOf(primitive), result))
-                }
-            }
+        val propChangeCmds = primitives.flatMap { primitive ->
+            usableKeys.filter { primitive.hasKey(it) }
+                .map { key -> ChangePropertyCommand(listOf(primitive), merge(primitive, key)) }
         }
 
-        val seqCmds = SequenceCommand(tr("Switch to contact prefix scheme"), propChangeCmds as Collection<Command>)
-
-        UndoRedoHandler.getInstance().add(seqCmds, true)
+        if (propChangeCmds.isNotEmpty()) {
+            val seqCmds = SequenceCommand(tr("Switch to contact prefix scheme"), propChangeCmds)
+            UndoRedoHandler.getInstance().add(seqCmds, true)
+        }
     }
 
     /**
