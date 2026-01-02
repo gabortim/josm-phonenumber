@@ -41,7 +41,7 @@ I'd like to make the code more testable to extend the test coverage.
 To be able to sync the project dependencies after cloning, you need a few extra steps, unfortunately.
 1. Go to your GitHub user profile dev settings: https://github.com/settings/tokens
 2. Generate a new **classic token** with `read:packages` permission.
-3. Create a `gradle.properties` file in the project root
+3. Create a `local.properties` file in the project root
 4. Add these lines to the file:
    - ```properties
      GITHUB_ACTOR=<your GitHub username>

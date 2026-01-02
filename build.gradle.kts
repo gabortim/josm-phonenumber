@@ -1,4 +1,5 @@
 import java.net.URI
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.josm)
@@ -41,8 +42,20 @@ repositories {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/gabortim/josm-libphonenumber")
         credentials {
-            username = System.getenv("GITHUB_ACTOR") ?: providers.gradleProperty("GITHUB_ACTOR").get()
-            password = System.getenv("GITHUB_TOKEN") ?: providers.gradleProperty("GITHUB_PACKAGE_REPO_TOKEN").get()
+            val localProperties = Properties().apply {
+                val file = rootProject.file("local.properties")
+                if (file.exists()) {
+                    file.inputStream().use { inputStream ->
+                        load(inputStream)
+                    }
+                }
+            }
+
+            username = System.getenv("GITHUB_ACTOR")
+                ?: localProperties.getProperty("GITHUB_ACTOR")
+
+            password = System.getenv("GITHUB_TOKEN")
+                ?: localProperties.getProperty("GITHUB_PACKAGE_REPO_TOKEN")
         }
     }
 }
