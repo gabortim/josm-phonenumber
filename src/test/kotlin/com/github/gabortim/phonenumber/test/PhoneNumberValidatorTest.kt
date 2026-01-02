@@ -1,10 +1,17 @@
 package com.github.gabortim.phonenumber.test
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openstreetmap.josm.data.coor.LatLon
-import org.openstreetmap.josm.data.osm.*
+import org.openstreetmap.josm.data.osm.DataSet
+import org.openstreetmap.josm.data.osm.Node
+import org.openstreetmap.josm.data.osm.Relation
+import org.openstreetmap.josm.data.osm.RelationMember
+import org.openstreetmap.josm.data.osm.TagMap
+import org.openstreetmap.josm.data.osm.Way
 import org.openstreetmap.josm.data.preferences.BooleanProperty
 import org.openstreetmap.josm.data.validation.Severity
 import org.openstreetmap.josm.testutils.annotations.BasicPreferences
@@ -138,7 +145,7 @@ class PhoneNumberValidatorTest {
         validator.errors
             .stream()
             .filter { error -> error.severity.equals(Severity.WARNING) }
-            .forEach{ testError -> testError.fix.executeCommand() }
+            .forEach { testError -> testError.fix.executeCommand() }
 
         ds.allPrimitives().forEach { _ ->
             val nodeRef = Node(latLonHungary)

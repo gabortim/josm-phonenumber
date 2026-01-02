@@ -1,9 +1,8 @@
 package com.github.gabortim.phonenumber.tool
 
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openstreetmap.josm.data.coor.LatLon
 import org.openstreetmap.josm.data.osm.Node
 import org.openstreetmap.josm.testutils.annotations.Territories

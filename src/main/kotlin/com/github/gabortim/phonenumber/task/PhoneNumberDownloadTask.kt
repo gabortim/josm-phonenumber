@@ -16,7 +16,7 @@ class PhoneNumberDownloadTask(private val bounds: Bounds) :
     PleaseWaitRunnable(tr("Download objects via Overpass API")) {
     private var canceled = false
     private var query: String = SearchCompilerQueryWizard.constructQuery(
-        PhoneNumberValidator.usableKeys.joinToString(separator = "=* or ") { "\"$it\""}.plus("=*")
+        PhoneNumberValidator.usableKeys.joinToString(separator = "=* or ") { "\"$it\"" }.plus("=*")
     )
     private lateinit var tmpLayer: OsmDataLayer
 
