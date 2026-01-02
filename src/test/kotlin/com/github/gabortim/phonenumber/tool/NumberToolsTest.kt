@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.openstreetmap.josm.testutils.annotations.BasicPreferences
 
+@BasicPreferences
 class NumberToolsTest {
     @Test
     fun testContainsNonstandardChars() {
@@ -55,34 +57,34 @@ class NumberToolsTest {
     @Test
     fun testSplitByLastSeparator() {
         var processed = splitByLastSeparator("+36 90 317 282/256")
-        assertArrayEquals(arrayOf("+36 90 317 282", "256", "/"), processed)
+        assertEquals(listOf("+36 90 317 282", "256", "/"), processed)
         processed = splitByLastSeparator("+36 62 474 255 / 14")
-        assertArrayEquals(arrayOf("+36 62 474 255", "14", "/"), processed)
+        assertEquals(listOf("+36 62 474 255", "14", "/"), processed)
         processed = splitByLastSeparator("+36 62 474 255/14")
-        assertArrayEquals(arrayOf("+36 62 474 255", "14", "/"), processed)
+        assertEquals(listOf("+36 62 474 255", "14", "/"), processed)
         processed = splitByLastSeparator("+3662474255/14")
-        assertArrayEquals(arrayOf("+3662474255", "14", "/"), processed)
+        assertEquals(listOf("+3662474255", "14", "/"), processed)
         processed = splitByLastSeparator("+36 62 544-310 / 301")
-        assertArrayEquals(arrayOf("+36 62 544-310", "301", "/"), processed)
+        assertEquals(listOf("+36 62 544-310", "301", "/"), processed)
         processed = splitByLastSeparator("+3613251100/57311")
-        assertArrayEquals(arrayOf("+3613251100", "57311", "/"), processed)
+        assertEquals(listOf("+3613251100", "57311", "/"), processed)
         processed = splitByLastSeparator("+3613251100#57311")
-        assertArrayEquals(arrayOf("+3613251100", "57311", "#"), processed)
+        assertEquals(listOf("+3613251100", "57311", "#"), processed)
         processed = splitByLastSeparator("+43 5572 27505 723")
-        assertArrayEquals(arrayOf("+43 5572 27505", "723", " "), processed)
+        assertEquals(listOf("+43 5572 27505", "723", " "), processed)
         processed = splitByLastSeparator("+43 5574 46467 87090")
-        assertArrayEquals(arrayOf("+43 5574 46467", "87090", " "), processed)
+        assertEquals(listOf("+43 5574 46467", "87090", " "), processed)
         processed = splitByLastSeparator("+43 5574 64999 64")
-        assertArrayEquals(arrayOf("+43 5574 64999", "64", " "), processed)
+        assertEquals(listOf("+43 5574 64999", "64", " "), processed)
         processed = splitByLastSeparator("+43 5574 45127 12510")
-        assertArrayEquals(arrayOf("+43 5574 45127", "12510", " "), processed)
+        assertEquals(listOf("+43 5574 45127", "12510", " "), processed)
         processed = splitByLastSeparator("+36 62/424-805 / 612")
-        assertArrayEquals(arrayOf("+36 62/424-805", "612", "/"), processed)
+        assertEquals(listOf("+36 62/424-805", "612", "/"), processed)
         processed = splitByLastSeparator("+43 50 5333-6630")
-        assertArrayEquals(arrayOf("+43 50 5333", "6630", "-"), processed)
+        assertEquals(listOf("+43 50 5333", "6630", "-"), processed)
         processed = splitByLastSeparator("+43 5574 48442-0")
-        assertArrayEquals(arrayOf("+43 5574 48442", "0", "-"), processed)
+        assertEquals(listOf("+43 5574 48442", "0", "-"), processed)
         processed = splitByLastSeparator("+4975312841557")
-        assertArrayEquals(arrayOf("+4975312841557"), processed)
+        assertEquals(listOf("+4975312841557"), processed)
     }
 }
