@@ -1,6 +1,6 @@
 package com.github.gabortim.phonenumber.task
 
-import com.github.gabortim.phonenumber.test.PhoneNumberValidator
+import com.github.gabortim.phonenumber.validation.PhoneNumberValidator
 import org.openstreetmap.josm.data.Bounds
 import org.openstreetmap.josm.gui.MainApplication
 import org.openstreetmap.josm.gui.PleaseWaitRunnable

@@ -2,7 +2,7 @@ package com.github.gabortim.phonenumber
 
 import com.github.gabortim.phonenumber.action.ContactSchemeSwitchAction
 import com.github.gabortim.phonenumber.action.PhoneNumberDownloadAction
-import com.github.gabortim.phonenumber.test.PhoneNumberValidator
+import com.github.gabortim.phonenumber.validation.PhoneNumberValidator
 import org.openstreetmap.josm.actions.JosmAction
 import org.openstreetmap.josm.data.validation.OsmValidator
 import org.openstreetmap.josm.gui.MainApplication

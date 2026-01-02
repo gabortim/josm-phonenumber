@@ -1,4 +1,4 @@
-package com.github.gabortim.phonenumber.test
+package com.github.gabortim.phonenumber.validation
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

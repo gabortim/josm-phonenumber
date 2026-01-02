@@ -1,4 +1,4 @@
-package com.github.gabortim.phonenumber.test
+package com.github.gabortim.phonenumber.validation
 
 import com.github.gabortim.phonenumber.tool.PrimitiveGeocoder.getIso3166Alpha2Code
 import org.openstreetmap.josm.actions.ExpertToggleAction
@@ -16,24 +16,37 @@ import org.openstreetmap.josm.tools.Destroyable
 import org.openstreetmap.josm.tools.GBC
 import org.openstreetmap.josm.tools.I18n.tr
 import org.openstreetmap.josm.tools.PatternUtils
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.BAD_FORMAT
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.BAD_SEPARATOR
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.INVALID_NUMBER
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.MULTI
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.PARSE_ERROR
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.TOO_FEW_GROUPING
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.TOO_SHORT_NUMBER
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.WRONG_REGION
 import javax.swing.JCheckBox
 import javax.swing.JPanel
 
 
-// Error codes
-const val PARSE_ERROR = 10600
-const val INVALID_NUMBER = 10601
-const val WRONG_REGION = 10602
-const val BAD_FORMAT = 10603
-const val BAD_SEPARATOR = 10604
-const val TOO_SHORT_NUMBER = 10605
-const val TOO_FEW_GROUPING = 10606
+object ValidatorConstants {
+    // Error codes
+    const val PARSE_ERROR = 10600
+    const val INVALID_NUMBER = 10601
+    const val WRONG_REGION = 10602
+    const val BAD_FORMAT = 10603
+    const val BAD_SEPARATOR = 10604
+    const val TOO_SHORT_NUMBER = 10605
+    const val TOO_FEW_GROUPING = 10606
 
-/** Value for batch error warnings and fixes */
-const val MULTI = 10607
+    /** Value for batch error warnings and fixes */
+    const val MULTI = 10607
 
-/** Semicolon as the tag value separator. */
-const val SEP = ';'
+    /** Semicolon as the tag value separator. */
+    const val SEP = ';'
+
+    /** Key prefix used for contact tagging scheme */
+    const val CONTACT_SCHEME_PREFIX = "contact:"
+}
 
 
 /**
@@ -98,88 +111,47 @@ class PhoneNumberValidator : TagTest(
     }
 
     override fun check(primitive: OsmPrimitive) {
-        parsedNumbers = PhoneNumber(primitive, getIso3166Alpha2Code(primitive), forceContactSchemeProperty.get())
+        val region = getIso3166Alpha2Code(primitive)
+        parsedNumbers = PhoneNumber(primitive, region, forceContactSchemeProperty.get())
+
+        val errorBuilder = { severity: Severity, code: Int, message: String, value: String? ->
+            val builder = TestError.builder(this, severity, code)
+                .message(tr("Phone number invalid"), message, value)
+                .primitives(primitive)
+            errors.add(builder.build())
+        }
 
         /// non autofixable errors
         for (value in parsedNumbers.invalid) {
-            errors.add(
-                TestError.builder(this, Severity.ERROR, PARSE_ERROR)
-                    .message(
-                        tr("Phone number invalid"),
-                        tr("couldn''t parse {0}", value)
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
+            errorBuilder(Severity.ERROR, PARSE_ERROR, tr("couldn''t parse {0}"), value)
         }
         for (value in parsedNumbers.tooShort) {
-            errors.add(
-                TestError.builder(this, Severity.ERROR, TOO_SHORT_NUMBER)
-                    .message(
-                        tr("Phone number invalid"),
-                        tr("too short {0}", value)
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
+            errorBuilder(Severity.ERROR, TOO_SHORT_NUMBER, tr("too short {0}"), value)
         }
         for (value in parsedNumbers.unusualChars) {
-            errors.add(
-                TestError.builder(this, Severity.ERROR, INVALID_NUMBER)
-                    .message(
-                        tr("Phone number invalid"),
-                        tr("unusual chars {0}", value)
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
+            errorBuilder(Severity.ERROR, INVALID_NUMBER, tr("unusual chars {0}"), value)
         }
         for (value in parsedNumbers.notWellFormatted) {
-            errors.add(
-                TestError.builder(this, Severity.WARNING, TOO_FEW_GROUPING)
-                    .message(
-                        tr("Phone number invalid"),
-                        tr("Not enough grouping characters. Is it contains extension?"), value
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
+            errorBuilder(Severity.WARNING, TOO_FEW_GROUPING, tr("Not enough grouping characters. Is it contains extension?"), value)
         }
-        for (region in parsedNumbers.inWrongRegion) {
-            errors.add(
-                TestError.builder(this, Severity.WARNING, WRONG_REGION)
-                    .message(
-                        tr("Phone number possibly in wrong region"),
-                        region.ifEmpty { tr("<empty>") }
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
+        for (regionCode in parsedNumbers.inWrongRegion) {
+            val builder = TestError.builder(this, Severity.WARNING, WRONG_REGION)
+                .message(tr("Phone number possibly in wrong region"), regionCode.ifEmpty { tr("<empty>") })
+                .primitives(primitive)
+            errors.add(builder.build())
         }
 
         /// autofixable warnings
         for (key in parsedNumbers.badSeparator) {
-            errors.add(
-                TestError.builder(this, Severity.ERROR, BAD_SEPARATOR)
-                    .message(
-                        tr("Phone number invalid"),
-                        tr("wrong separator used in {0} key", key)
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
+            errorBuilder(Severity.ERROR, BAD_SEPARATOR, tr("wrong separator used in {0} key"), key)
         }
+
         // avoid duplicate warning
         if (parsedNumbers.isFixable() && parsedNumbers.badSeparator.isEmpty()) {
-            errors.add(
-                TestError.builder(this, Severity.WARNING, MULTI)
-                    .message(
-                        tr("Phone number issues"),
-                        parsedNumbers.getValidatorDescription().joinToString()
-                    )
-                    .primitives(primitive)
-                    .build()
-            )
+            val builder = TestError.builder(this, Severity.WARNING, MULTI)
+                .message(tr("Phone number issues"), parsedNumbers.getValidatorDescription().joinToString())
+                .primitives(primitive)
+            errors.add(builder.build())
         }
     }
 

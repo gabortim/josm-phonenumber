@@ -1,8 +1,10 @@
-package com.github.gabortim.phonenumber.test
+package com.github.gabortim.phonenumber.validation
 
 import com.github.gabortim.phonenumber.tool.NumberFormatter
 import com.github.gabortim.phonenumber.tool.NumberFormatter.FailReason
 import com.github.gabortim.phonenumber.tool.NumberTools.splitAndStrip
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.CONTACT_SCHEME_PREFIX
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.SEP
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType
@@ -14,10 +16,6 @@ import org.openstreetmap.josm.tools.I18n.trn
 import org.openstreetmap.josm.tools.Logging
 
 
-/**
- * Key prefix used for contact tagging scheme
- */
-const val CONTACT_SCHEME_PREFIX = "contact:"
 
 /**
  * An object holding all phone tags of the given primitive.
@@ -40,7 +38,7 @@ class PhoneNumber(
      */
     private var prefix = ""
 
-    private val originalNumbers = HashMap<String, ArrayList<String>>(4)
+    private val originalNumbers = HashMap<String, List<String>>(4)
     private val processedNumbers = HashMap<String, LinkedHashSet<String>>(4)
 
     /**
@@ -120,9 +118,9 @@ class PhoneNumber(
             if (tag.value.contains(','))
                 badSeparator.add(tag.key)
 
-            val splitValues = splitAndStrip(tag.value) as ArrayList<String>
+            val splitValues = splitAndStrip(tag.value).toList()
 
-            if (!tag.value.equals(splitValues.joinToString(SEP.toString()))) {
+            if (tag.value != splitValues.joinToString(SEP.toString())) {
                 isBeautifyable = true
             }
 
@@ -134,7 +132,7 @@ class PhoneNumber(
      * Separate numbers into phone=* and mobile=* tags.
      */
     private fun categorizeTags() {
-        val parsed: Phonenumber.PhoneNumber = Phonenumber.PhoneNumber()
+        val parsed = Phonenumber.PhoneNumber()
 
         // iterate over values
         for (tag in originalNumbers.entries) {
@@ -142,21 +140,21 @@ class PhoneNumber(
             for (number in tag.value) {
                 try {
                     phoneNumberUtil.parseAndKeepRawInput(number, region, parsed)
-                    val formatted = NumberFormatter.format(parsed)
+                    val (formattedValue, failReason) = NumberFormatter.format(parsed)
 
                     if (region != phoneNumberUtil.getRegionCodeForNumber(parsed))
-                        inWrongRegion.add(formatted.first)
+                        inWrongRegion.add(formattedValue)
 
-                    when (formatted.second) {
+                    when (failReason) {
                         FailReason.NONE -> {
-                            if ("fax" in tag.key.lowercase())
-                                addEntry("fax", formatted.first, tag.key)
-                            else if (phoneNumberUtil.getNumberType(parsed) == PhoneNumberType.MOBILE)
-                                addEntry("mobile", formatted.first, tag.key)
-                            else
-                                addEntry("phone", formatted.first, tag.key)
+                            val targetKey = when {
+                                "fax" in tag.key.lowercase() -> "fax"
+                                phoneNumberUtil.getNumberType(parsed) == PhoneNumberType.MOBILE -> "mobile"
+                                else -> "phone"
+                            }
+                            addEntry(targetKey, formattedValue, tag.key)
 
-                            if (number != formatted.first)
+                            if (number != formattedValue)
                                 isFormatted = true
                         }
 
@@ -194,16 +192,14 @@ class PhoneNumber(
             hasSwitchedClass = true
 
         // detect schema change
-        if (!oldKey.contains(CONTACT_SCHEME_PREFIX) && prefix == CONTACT_SCHEME_PREFIX)
+        if (CONTACT_SCHEME_PREFIX !in oldKey && prefix == CONTACT_SCHEME_PREFIX)
             hasSchemaChange = true
     }
 
     /**
      * Replies processed numbers as TagMap.
      */
-    fun getTagMap(): TagMap {
-        return TagMap(getAsMap())
-    }
+    fun getTagMap(): TagMap = TagMap(getAsMap())
 
     /**
      * Replies processed numbers as a Java map. Also, keys with empty string queued for removal.
@@ -211,8 +207,8 @@ class PhoneNumber(
     fun getAsMap(): Map<String, String> {
         val map = HashMap<String, String>()
 
-        for (entry in processedNumbers)
-            map[entry.key] = entry.value.joinToString(SEP.toString())
+        for ((key, value) in processedNumbers)
+            map[key] = value.joinToString(SEP.toString())
 
         //add keys with empty values for auto removal
         for (key in originalNumbers.keys - map.keys)
@@ -224,17 +220,15 @@ class PhoneNumber(
     /**
      * Returns if the given OSM object had at least one premium calling rate number.
      */
-    private fun hasPremiumNumber(): Boolean {
-        return premiumNumber.isNotEmpty()
-    }
+    private fun hasPremiumNumber(): Boolean = premiumNumber.isNotEmpty()
 
     /**
      * Returns if the given OSM object had duplicated phone numbers,
      * excluding cases where the phone and fax number matches.
      */
     private fun hasDuplicates(): Boolean {
-        val orig = originalNumbers.values.sumOf { arrayList: ArrayList<String> -> arrayList.size }
-        val proc = processedNumbers.values.sumOf { linkedHashSet: LinkedHashSet<String> -> linkedHashSet.size }
+        val orig = originalNumbers.values.sumOf { it.size }
+        val proc = processedNumbers.values.sumOf { it.size }
 
         return orig - (proc + premiumNumber.size + unusualChars.size + tooShort.size + invalid.size
             + notWellFormatted.size) > 0
@@ -243,9 +237,7 @@ class PhoneNumber(
     /**
      * Returns true if any of the phone numbers has separator issue.
      */
-    private fun hasWrongSeparator(): Boolean {
-        return badSeparator.isNotEmpty()
-    }
+    private fun hasWrongSeparator(): Boolean = badSeparator.isNotEmpty()
 
     /**
      * Returns true if the primitive is fixable.

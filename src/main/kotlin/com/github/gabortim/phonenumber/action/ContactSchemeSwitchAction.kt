@@ -1,11 +1,10 @@
 package com.github.gabortim.phonenumber.action
 
-import com.github.gabortim.phonenumber.test.CONTACT_SCHEME_PREFIX
-import com.github.gabortim.phonenumber.test.SEP
 import com.github.gabortim.phonenumber.tool.NumberTools
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.CONTACT_SCHEME_PREFIX
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.SEP
 import org.openstreetmap.josm.actions.JosmAction
 import org.openstreetmap.josm.command.ChangePropertyCommand
-import org.openstreetmap.josm.command.Command
 import org.openstreetmap.josm.command.SequenceCommand
 import org.openstreetmap.josm.data.UndoRedoHandler
 import org.openstreetmap.josm.data.osm.OsmPrimitive
