@@ -1,55 +1,52 @@
+image: eclipse-temurin:21-jdk-noble
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+  policy: pull-push
+
 stages:
-  - verify
-  - validate
+  - test
   - visualize
   - package
 
-compile-jdk17:
-  stage: verify
-  image: amd64/openjdk:17-jdk-bullseye
-  script:
-    - ./gradlew build
-
-compile-jdk21:
-  stage: verify
-  image: amd64/openjdk:21-jdk-bullseye
-  script:
-    - ./gradlew build
-
 test:
-  stage: validate
-  image: amd64/openjdk:17-jdk-bullseye
+  stage: test
   script:
     - ./gradlew check jacocoTestReport
-  needs: [ "compile-jdk17" ]
   artifacts:
+    when: always
     reports:
       junit: build/test-results/test/**/TEST-*.xml
     paths:
       - build/reports/jacoco/test/jacocoTestReport.xml
+      - build/reports/tests/test/
   coverage: '/Branch coverage: \d+\.\d+/'
 
 coverage:
   stage: visualize
-  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.10
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.11
+  needs: ["test"]
   script:
     - python /opt/cover2cover.py build/reports/jacoco/test/jacocoTestReport.xml $CI_PROJECT_DIR/src/main/kotlin/ > build/cobertura.xml
-  needs: [ "test" ]
   artifacts:
     reports:
       coverage_report:
         coverage_format: cobertura
         path: build/cobertura.xml
-  allow_failure: true
 
-jar:
+package:
   stage: package
-  image: amd64/openjdk:17-jdk-bullseye
+  needs: ["test"]
   script:
-    - apt-get update
-    - apt-get install -y gettext
+    - apt-get update && apt-get install -y gettext
     - ./gradlew dist generatePot
-  needs: [ "test" ]
   artifacts:
     paths:
       - build/dist/*.jar
