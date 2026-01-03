@@ -27,7 +27,7 @@ class ContactSchemeSwitchAction :
     }
 
     companion object {
-        private val usableKeys = arrayOf("email", "phone", "mobile", "website", "facebook", "fax")
+        private val usableKeys = arrayOf("email", "phone", "mobile", "website", "facebook", "fax", "instagram", "youtube", "twitter", "linkedin")
     }
 
     override fun updateEnabledState(selection: Collection<OsmPrimitive>) {
