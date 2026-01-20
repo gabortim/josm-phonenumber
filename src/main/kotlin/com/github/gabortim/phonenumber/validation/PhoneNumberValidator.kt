@@ -5,7 +5,6 @@ import org.openstreetmap.josm.actions.ExpertToggleAction
 import org.openstreetmap.josm.actions.ExpertToggleAction.ExpertModeChangeListener
 import org.openstreetmap.josm.command.ChangePropertyCommand
 import org.openstreetmap.josm.command.Command
-import org.openstreetmap.josm.command.SequenceCommand
 import org.openstreetmap.josm.data.osm.OsmPrimitive
 import org.openstreetmap.josm.data.preferences.BooleanProperty
 import org.openstreetmap.josm.data.preferences.sources.ValidatorPrefHelper
@@ -16,7 +15,6 @@ import org.openstreetmap.josm.tools.Destroyable
 import org.openstreetmap.josm.tools.GBC
 import org.openstreetmap.josm.tools.I18n.tr
 import org.openstreetmap.josm.tools.PatternUtils
-import com.github.gabortim.phonenumber.validation.ValidatorConstants.BAD_FORMAT
 import com.github.gabortim.phonenumber.validation.ValidatorConstants.BAD_SEPARATOR
 import com.github.gabortim.phonenumber.validation.ValidatorConstants.INVALID_NUMBER
 import com.github.gabortim.phonenumber.validation.ValidatorConstants.MULTI
@@ -33,7 +31,7 @@ object ValidatorConstants {
     const val PARSE_ERROR = 10600
     const val INVALID_NUMBER = 10601
     const val WRONG_REGION = 10602
-    const val BAD_FORMAT = 10603
+    // unused code 10603
     const val BAD_SEPARATOR = 10604
     const val TOO_SHORT_NUMBER = 10605
     const val TOO_FEW_GROUPING = 10606
@@ -73,17 +71,16 @@ class PhoneNumberValidator : TagTest(
         fun isKeyUsable(key: String): Boolean {
             return usableKeys.any { s: String -> PatternUtils.compile("${s}(_\\d*)?").matcher(key).matches() }
         }
+
+        /** JOSM registry setting prefix for the phonenumber plugin preferences. */
+        val validatorPrefix = ValidatorPrefHelper.PREFIX + "." + PhoneNumberValidator::class.java.simpleName
     }
 
-    /** JOSM registry setting prefix for the plugin preferences. */
-    private val prefix = ValidatorPrefHelper.PREFIX + "." + PhoneNumberValidator::class.java.simpleName
+    private val autofixProperty = BooleanProperty("$validatorPrefix.autofix", false)
+    private val forceContactSchemeProperty = BooleanProperty("$validatorPrefix.forceContactScheme", true)
 
-    private val autofixProperty = BooleanProperty("$prefix.autofix", false)
-    private val forceContactSchemeProperty = BooleanProperty("$prefix.force_contactScheme", true)
-
-    private val checkboxAutofix = JCheckBox(tr("EXPERIMENTAL! Enable autofix"))
-
-    private lateinit var parsedNumbers: PhoneNumber
+    private val checkboxAutofix = JCheckBox(tr("BETA! Enable autofix"))
+    private val checkboxForceContactScheme = JCheckBox(tr("Enforce contact scheme"))
 
     override fun addGui(testPanel: JPanel) {
         super.addGui(testPanel)
@@ -93,11 +90,15 @@ class PhoneNumberValidator : TagTest(
             checkboxAutofix.isSelected = autofixProperty.get()
             testPanel.add(checkboxAutofix, GBC.eol().insets(20, 0, 0, 0))
         }
+
+        checkboxForceContactScheme.isSelected = forceContactSchemeProperty.get()
+        testPanel.add(checkboxForceContactScheme, GBC.eol().insets(20, 0, 0, 0))
     }
 
     override fun ok(): Boolean {
         super.ok()
         autofixProperty.put(checkboxAutofix.isSelected)
+        forceContactSchemeProperty.put(checkboxForceContactScheme.isSelected)
         return false
     }
 
@@ -112,12 +113,22 @@ class PhoneNumberValidator : TagTest(
 
     override fun check(primitive: OsmPrimitive) {
         val region = getIso3166Alpha2Code(primitive)
-        parsedNumbers = PhoneNumber(primitive, region, forceContactSchemeProperty.get())
+        val parsedNumbers = PhoneNumber(primitive, region, forceContactSchemeProperty.get())
+
+        val fixedMap = parsedNumbers.getAsMap()
+        val fixCommand = if (fixedMap != primitive.interestingTags) {
+            ChangePropertyCommand(listOf(primitive), fixedMap)
+        } else null
 
         val errorBuilder = { severity: Severity, code: Int, message: String, value: String? ->
             val builder = TestError.builder(this, severity, code)
                 .message(tr("Phone number invalid"), message, value)
                 .primitives(primitive)
+
+            if (fixCommand != null) {
+                builder.fix { fixCommand }
+            }
+
             errors.add(builder.build())
         }
 
@@ -138,6 +149,10 @@ class PhoneNumberValidator : TagTest(
             val builder = TestError.builder(this, Severity.WARNING, WRONG_REGION)
                 .message(tr("Phone number possibly in wrong region"), regionCode.ifEmpty { tr("<empty>") })
                 .primitives(primitive)
+
+            if (fixCommand != null)
+                builder.fix { fixCommand }
+
             errors.add(builder.build())
         }
 
@@ -151,33 +166,22 @@ class PhoneNumberValidator : TagTest(
             val builder = TestError.builder(this, Severity.WARNING, MULTI)
                 .message(tr("Phone number issues"), parsedNumbers.getValidatorDescription().joinToString())
                 .primitives(primitive)
+
+            if (fixCommand != null)
+                builder.fix { fixCommand }
+
             errors.add(builder.build())
         }
     }
 
     override fun fixError(testError: TestError): Command? {
-        val commands: MutableList<Command> = ArrayList()
-
-        for (primitive in testError.primitives) {
-            parsedNumbers = PhoneNumber(primitive, getIso3166Alpha2Code(primitive), forceContactSchemeProperty.get())
-
-            commands += ChangePropertyCommand(
-                setOf(primitive),
-                parsedNumbers.getAsMap()
-            )
-        }
-
-        return when (commands.size) {
-            0 -> null
-            1 -> commands[0]
-            else -> SequenceCommand(tr("Fix phone number values"), commands)
-        }
+        return testError.fix
     }
 
     override fun isFixable(testError: TestError): Boolean {
         if (autofixProperty.get() && testError.tester is PhoneNumberValidator) {
             val c = testError.code
-            return c == BAD_FORMAT || c == BAD_SEPARATOR || c == MULTI
+            return c == BAD_SEPARATOR || c == MULTI
         }
         return false
     }

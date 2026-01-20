@@ -188,9 +188,10 @@ class PhoneNumberValidatorTest {
         node.setKeys(tags)
         ds.addPrimitive(node)
 
+        setAutofixProperty(true)
         validator.check(node)
         assertEquals(1, validator.errors.size)
-        // TestError.message is actually the tr("Phone number invalid")
+        assertTrue(validator.errors[0].isFixable)
     }
 
     @Test

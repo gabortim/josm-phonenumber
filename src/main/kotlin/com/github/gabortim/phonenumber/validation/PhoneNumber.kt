@@ -10,11 +10,9 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType
 import com.google.i18n.phonenumbers.Phonenumber
 import org.openstreetmap.josm.data.osm.OsmPrimitive
-import org.openstreetmap.josm.data.osm.TagMap
 import org.openstreetmap.josm.tools.I18n.tr
 import org.openstreetmap.josm.tools.I18n.trn
 import org.openstreetmap.josm.tools.Logging
-
 
 
 /**
@@ -120,9 +118,8 @@ class PhoneNumber(
 
             val splitValues = splitAndStrip(tag.value).toList()
 
-            if (tag.value != splitValues.joinToString(SEP.toString())) {
+            if (tag.value != splitValues.joinToString(SEP.toString()))
                 isBeautifyable = true
-            }
 
             originalNumbers[tag.key] = splitValues
         }
@@ -149,7 +146,10 @@ class PhoneNumber(
                         FailReason.NONE -> {
                             val targetKey = when {
                                 "fax" in tag.key.lowercase() -> "fax"
-                                phoneNumberUtil.getNumberType(parsed) == PhoneNumberType.MOBILE -> "mobile"
+                                phoneNumberUtil.getNumberType(parsed) == PhoneNumberType.MOBILE -> {
+                                    prefix = CONTACT_SCHEME_PREFIX
+                                    "mobile"
+                                }
                                 else -> "phone"
                             }
                             addEntry(targetKey, formattedValue, tag.key)
@@ -166,12 +166,12 @@ class PhoneNumber(
                     }
 
                 } catch (e: NumberParseException) {
+                    Logging.trace(e)
+                    Logging.debug("Problematic number found '$number' (${primitive.type}${primitive.id})")
+
                     // add original tag without modification
                     addEntry(tag.key, number, tag.key)
                     invalid.add(number)
-
-                    Logging.trace(e)
-                    Logging.debug("Problematic number found '$number' (${primitive.type}${primitive.id})")
                     continue
                 }
             }
@@ -192,14 +192,9 @@ class PhoneNumber(
             hasSwitchedClass = true
 
         // detect schema change
-        if (CONTACT_SCHEME_PREFIX !in oldKey && prefix == CONTACT_SCHEME_PREFIX)
+        if (!oldKey.startsWith(CONTACT_SCHEME_PREFIX) && prefix == CONTACT_SCHEME_PREFIX)
             hasSchemaChange = true
     }
-
-    /**
-     * Replies processed numbers as TagMap.
-     */
-    fun getTagMap(): TagMap = TagMap(getAsMap())
 
     /**
      * Replies processed numbers as a Java map. Also, keys with empty string queued for removal.
