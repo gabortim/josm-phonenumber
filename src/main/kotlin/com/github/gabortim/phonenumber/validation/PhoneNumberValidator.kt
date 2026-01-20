@@ -59,12 +59,12 @@ class PhoneNumberValidator : TagTest(
 ), ExpertModeChangeListener, Destroyable {
     companion object {
         val usableKeys = setOf(
-            "phone",            // 2.026.095 instances (taginfo as of 2022-01-25)
-            "contact:phone",    // 544.454
-            "fax",              // 157.442
-            "contact:fax",      // 73.495
-            "contact:mobile",   // 21.596
-            "phone:mobile"      // 4.166
+            "phone",            // 3.372.499 instances (taginfo as of 2026-01-02)
+            "contact:phone",    // 977.972
+            "fax",              // 190.245
+            "contact:fax",      // 90.630
+            "contact:mobile",   // 54.784
+            "phone:mobile"      // 5.977
         )
 
         /**
