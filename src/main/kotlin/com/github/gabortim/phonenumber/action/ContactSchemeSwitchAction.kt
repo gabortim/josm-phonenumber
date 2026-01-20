@@ -38,10 +38,19 @@ class ContactSchemeSwitchAction :
 
     override fun actionPerformed(actionEvent: ActionEvent) {
         val primitives = MainApplication.getLayerManager().editDataSet.selected
+        val propChangeCmds = mutableListOf<Command>()
 
-        val propChangeCmds = primitives.flatMap { primitive ->
-            usableKeys.filter { primitive.hasKey(it) }
-                .map { key -> ChangePropertyCommand(listOf(primitive), merge(primitive, key)) }
+        for (primitive in primitives) {
+            val mergedProperties = mutableMapOf<String, String>()
+            for (key in usableKeys.get()) {
+                if (primitive.hasKey(key)) {
+                    mergedProperties.putAll(merge(primitive, key))
+                }
+            }
+
+            if (mergedProperties.isNotEmpty()) {
+                propChangeCmds.add(ChangePropertyCommand(listOf(primitive), mergedProperties))
+            }
         }
 
         if (propChangeCmds.isNotEmpty()) {
