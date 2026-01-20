@@ -29,7 +29,7 @@ import org.openstreetmap.josm.tools.Logging
 class PhoneNumber(
     private val primitive: OsmPrimitive,
     private val region: String,
-    private var switchToContactScheme: Boolean
+    private val switchToContactScheme: Boolean
 ) {
     /**
      * OSM primitive key prefix.

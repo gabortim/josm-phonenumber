@@ -75,7 +75,7 @@ class PhoneNumberTest {
         val pn = PhoneNumber(node, "HU", false)
         assertTrue(pn.isFixable())
         assertTrue(pn.getValidatorDescription().contains("inappropriate key"))
-        assertEquals("+36 70 123 4567", pn.getAsMap()["mobile"])
+        assertEquals("+36 70 123 4567", pn.getAsMap()["contact:mobile"])
         assertEquals("", pn.getAsMap()["phone"])
     }
 }
