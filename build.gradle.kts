@@ -1,11 +1,20 @@
-import java.io.ByteArrayOutputStream
 import java.net.URI
+import java.util.Properties
 
 plugins {
-    id("org.openstreetmap.josm") version "0.8.2"
-    kotlin("jvm") version "1.9.24"
+    alias(libs.plugins.josm)
+    alias(libs.plugins.kotlin.jvm)
     jacoco
 }
+
+val pluginVersion: String by project
+val josmCompileVersion: String by project
+val minJosmVersion: String by project
+val minJavaVersion: String by project
+val author: String by project
+val pluginDescription: String by project
+val mainClass: String by project
+val website: String by project
 
 java {
     toolchain {
@@ -13,8 +22,18 @@ java {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = minJavaVersion
+    }
+}
+
 tasks.compileJava {
-    options.release = 17
+    options.release = minJavaVersion.toInt()
+}
+
+tasks.compileTestJava {
+    options.release = minJavaVersion.toInt()
 }
 
 repositories {
@@ -23,8 +42,20 @@ repositories {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/gabortim/josm-libphonenumber")
         credentials {
-            username = System.getenv("GITHUB_ACTOR") ?: providers.gradleProperty("GITHUB_ACTOR").get()
-            password = System.getenv("GH_PACKAGE_REPO_TOKEN") ?: providers.gradleProperty("GH_PACKAGE_REPO_TOKEN").get()
+            val localProperties = Properties().apply {
+                val file = rootProject.file("local.properties")
+                if (file.exists()) {
+                    file.inputStream().use { inputStream ->
+                        load(inputStream)
+                    }
+                }
+            }
+
+            username = System.getenv("GITHUB_ACTOR")
+                ?: localProperties.getProperty("GITHUB_ACTOR")
+
+            password = System.getenv("GITHUB_TOKEN")
+                ?: localProperties.getProperty("GITHUB_PACKAGE_REPO_TOKEN")
         }
     }
 }
@@ -35,51 +66,35 @@ sourceSets {
     }
 }
 
-version = "1.2.0"
-val versionFile = "version.txt"
+version = pluginVersion
 
 josm {
     pluginName = "phonenumber"
-    josmCompileVersion = "19207"
+    this.josmCompileVersion = project.property("josmCompileVersion").toString()
     manifest {
-        author = "gaben"
-        description = "Gives the validator ability to verify and auto-fix incorrect phone numbers"
+        author = project.property("author").toString()
+        description = project.property("pluginDescription").toString()
         pluginDependencies.add("libphonenumber")
-        minJosmVersion = "18475" // due to PatternUtils
-        minJavaVersion = 17
+        minJosmVersion = project.property("minJosmVersion").toString()
+        minJavaVersion = project.property("minJavaVersion").toString().toInt()
         canLoadAtRuntime = true
-        mainClass = "com.github.gabortim.phonenumber.PhoneNumberPlugin"
+        mainClass = project.property("mainClass").toString()
         iconPath = "images/icon.svg"
-        website = URI("https://github.com/gabortim/josm-phonenumber").toURL()
+        website = URI(project.property("website").toString()).toURL()
     }
-}
-
-/**
- * Returns git revision number
- * @return returns git revision number
- */
-fun getGitHash(): String {
-    val stdout = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "rev-parse", "--short", "HEAD")
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
 }
 
 dependencies {
-    packIntoJar(kotlin("stdlib"))
+    packIntoJar(libs.kotlin.stdlib)
 
-    implementation("org.openstreetmap.josm.plugins:libphonenumber:8.+") { isChanging = true }
+    implementation(libs.libphonenumber) { isChanging = true }
 
-    // https://mvnrepository.com/artifact/org.wiremock/wiremock
-    testImplementation("org.wiremock:wiremock:3.5.4")
-    testImplementation(kotlin("reflect"))
+    testImplementation(libs.wiremock)
+    testImplementation(libs.kotlin.reflect)
 
-    val junit = "5.10.2"
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit}")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
-    testImplementation("org.openstreetmap.josm:josm-unittest:SNAPSHOT") { isChanging = true }
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.josm.unittest) { isChanging = true }
 }
 
 tasks.test {
@@ -105,21 +120,8 @@ tasks.jacocoTestCoverageVerification {
     dependsOn(tasks.jacocoTestReport)
 }
 
-tasks.register("storeVersion") {
-    // doLast is needed for the cleanup task
-    doLast {
-        File(versionFile).writeText("$version")
-    }
-}
-
 tasks.jar {
     from("images/**")
     from("README.md")
     from("LICENSE")
-
-    dependsOn("storeVersion")
-}
-
-tasks.clean {
-    delete(versionFile)
 }

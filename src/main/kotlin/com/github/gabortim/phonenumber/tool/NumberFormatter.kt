@@ -97,7 +97,7 @@ internal object NumberFormatter {
     }
 
     /**
-     * Returns if enough grouping characters found in the formatted string.
+     * Checks if enough grouping characters are present in the formatted string.
      */
     private fun hasEnoughGroupingChars(original: PhoneNumber, formatted: String): Boolean {
         val numberOfOriginalGroupingChars = getGroupingCharsCount(original.rawInput)
@@ -124,25 +124,25 @@ internal object NumberFormatter {
     }
 
     /**
-     * Fast implementation for checking number of grouping characters.
+     * Fast implementation for counting grouping characters.
      */
-    private fun getGroupingCharsCount(number: String): Int {
+    fun getGroupingCharsCount(number: String): Int {
         // TODO: check "ext." too!
         return number.count { it == ' ' || it == '#' || it == '-' || it == '/' }
     }
 
     /**
-     * Checks if the last grouping char used only once. This makes a possible valid separation,
+     * Checks if the last grouping char is used only once. This makes a possible valid separation,
      * although invalid for the parser.
      */
     fun possiblyValidExtensionSeparatorUsed(number: String): Boolean {
-        val array = splitByLastSeparator(number)
-        if (array.size < 3) return false
+        val parts = splitByLastSeparator(number)
+        if (parts.size < 3) return false
 
-        val sep: Char = array[2][0]
+        val sep: Char = parts[2][0]
         val sepCount = number.count { it == sep }
 
-        // && part: make sure more than 1 separator used
+        // ensure more than 1 separator used
         return (sepCount == 1 || sepCount == 2) && getGroupingCharsCount(number) > 1
     }
 

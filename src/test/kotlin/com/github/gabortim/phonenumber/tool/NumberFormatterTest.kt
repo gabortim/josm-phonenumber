@@ -7,7 +7,10 @@ import com.github.gabortim.phonenumber.tool.NumberFormatter.possiblyValidExtensi
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.openstreetmap.josm.testutils.annotations.BasicPreferences
@@ -111,18 +114,33 @@ class NumberFormatterTest {
     }
 
     @Test
-    @Disabled
     fun testGetGroupingCharsCount() {
+        assertEquals(0, NumberFormatter.getGroupingCharsCount("123456789"))
+        assertEquals(1, NumberFormatter.getGroupingCharsCount("123-456"))
+        assertEquals(2, NumberFormatter.getGroupingCharsCount("+36 1 123"))
+        assertEquals(3, NumberFormatter.getGroupingCharsCount("+36 1 123-456"))
+        assertEquals(1, NumberFormatter.getGroupingCharsCount("123#456"))
+        assertEquals(1, NumberFormatter.getGroupingCharsCount("123/456"))
     }
 
     @Test
-    @Disabled
     fun testIsValid() {
+        val region = "HU"
+        var number = util.parse("+36 1 123 4567", region)
+        assertTrue(NumberFormatter.isValid(number))
+
+        number = util.parse("+36 1 123", region)
+        assertFalse(NumberFormatter.isValid(number))
     }
 
     @Test
-    @Disabled
     fun testIsValidShort() {
+        val region = "HU"
+        var number = util.parse("112", region)
+        assertTrue(NumberFormatter.isValidShort(number))
+
+        number = util.parse("123456", region)
+        assertFalse(NumberFormatter.isValidShort(number))
     }
 
     @Test

@@ -1,6 +1,6 @@
 package com.github.gabortim.phonenumber.task
 
-import com.github.gabortim.phonenumber.test.PhoneNumberValidator
+import com.github.gabortim.phonenumber.validation.PhoneNumberValidator
 import org.openstreetmap.josm.data.Bounds
 import org.openstreetmap.josm.gui.MainApplication
 import org.openstreetmap.josm.gui.PleaseWaitRunnable
@@ -16,7 +16,7 @@ class PhoneNumberDownloadTask(private val bounds: Bounds) :
     PleaseWaitRunnable(tr("Download objects via Overpass API")) {
     private var canceled = false
     private var query: String = SearchCompilerQueryWizard.constructQuery(
-        PhoneNumberValidator.usableKeys.joinToString(separator = "=* or ") { "\"$it\""}.plus("=*")
+        PhoneNumberValidator.usableKeys.joinToString(separator = "=* or ") { "\"$it\"" }.plus("=*")
     )
     private lateinit var tmpLayer: OsmDataLayer
 

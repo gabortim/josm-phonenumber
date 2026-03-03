@@ -1,10 +1,17 @@
-package com.github.gabortim.phonenumber.test
+package com.github.gabortim.phonenumber.validation
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openstreetmap.josm.data.coor.LatLon
-import org.openstreetmap.josm.data.osm.*
+import org.openstreetmap.josm.data.osm.DataSet
+import org.openstreetmap.josm.data.osm.Node
+import org.openstreetmap.josm.data.osm.Relation
+import org.openstreetmap.josm.data.osm.RelationMember
+import org.openstreetmap.josm.data.osm.TagMap
+import org.openstreetmap.josm.data.osm.Way
 import org.openstreetmap.josm.data.preferences.BooleanProperty
 import org.openstreetmap.josm.data.validation.Severity
 import org.openstreetmap.josm.testutils.annotations.BasicPreferences
@@ -138,7 +145,7 @@ class PhoneNumberValidatorTest {
         validator.errors
             .stream()
             .filter { error -> error.severity.equals(Severity.WARNING) }
-            .forEach{ testError -> testError.fix.executeCommand() }
+            .forEach { testError -> testError.fix.executeCommand() }
 
         ds.allPrimitives().forEach { _ ->
             val nodeRef = Node(latLonHungary)
@@ -172,6 +179,31 @@ class PhoneNumberValidatorTest {
         validator.check(node)
         assertEquals(1, validator.errors.size)
         assertTrue("separator" in validator.errors[0].description)
+    }
+
+    @Test
+    fun testRaiseWarningUnusualChars() {
+        val node = Node(latLonHungary)
+        val tags = TagMap("contact:phone", "+36 30 DUGULAS")
+        node.setKeys(tags)
+        ds.addPrimitive(node)
+
+        setAutofixProperty(true)
+        validator.check(node)
+        assertEquals(1, validator.errors.size)
+        assertTrue(validator.errors[0].isFixable)
+    }
+
+    @Test
+    fun testMultipleIssues() {
+        val node = Node(latLonHungary)
+        // bad separator, beautifiable (extra space)
+        val tags = TagMap("phone", "+36 70 000 0000 , +36 70 000 0001")
+        node.setKeys(tags)
+        ds.addPrimitive(node)
+
+        validator.check(node)
+        assertEquals(1, validator.errors.size)
     }
 
     private fun setAutofixProperty(value: Boolean) {

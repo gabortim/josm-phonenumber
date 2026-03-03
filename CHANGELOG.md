@@ -4,25 +4,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - 2024-xx-xx
+## [1.2.0] - 2026-xx-xx
+### Added
+- Checkbox in the settings to disable _forced_ contact prefix scheme switch (issue #11). It
+  is still possible that switching happens if the object contains specific keys, e.g. `mobile`.
+- Make Tags/Memberships panel `contact:` switch tags runtime configurable
+- Support for `emergency:phone`
 ### Changed
 - Minimum required Java version is 17 from now on
-- Update Gradle to 8.9
-- Update Kotlin to 1.9.24
-- Bump JOSM compile version to r19207
+- Update Gradle to 8.14.3
+- Update Kotlin to 1.9.25
+- Bump JOSM compile version to r19439
+### Fixed
+- Duplicate ChangePropertyCommands in case of contact switching on the Tags/Memberships panel
 
 ## [1.1.1] - 2023-10-08
 ### Added
 - More tests, including some regression tests
 ### Changed
 - Update Gradle to 8.4
-- Switch the test framework from TestNG to JUnit because of upstream dependency
+- Switch the test framework from TestNG to JUnit because of the upstream dependency
 - Fixed a typo in a warning message
 - Fixed duplicate warning for the same autofixable issue (bad separator and beatutifiable)
 
 ## [1.1.0] - 2023-10-05
 ### Added
-- New validator message in case no (auto-fixable) formatting issue found
+- New validator message in case no (auto-fixable) formatting issue is found
 ### Changed
 - Increased region check level to warning
 - Update Gradle to 8.3
@@ -33,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - `NullPointerException` while trying to get region code for a number (issue #7)
 - An issue related to JOSM internal territories ISO country code retrieval
-- A possible double contact: prefix issue
+- A possible double `contact:` prefix issue
 
 ## [1.0.3] - 2023-06-15
 ### Changed
@@ -71,8 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.16.1] - 2023-02-25
 ### Fixed
 - ContactSchemeSwitchAction
-  - now the undo action is working
-  - data layer remove no longer breaks the menu
+    - now the undo action is working
+    - data layer remove no longer breaks the menu
 - GitHub release process
 ### Changed
 - Update Kotlin to 1.8.10
@@ -115,7 +122,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.13.0] - 2022-01-26
 ### Changed
 - Enabled forceful contact scheme switch
-  - Added BooleanProperty for behaviour setting
+    - Added BooleanProperty for behaviour setting
 
 ## [0.12.1] - 2022-01-19
 ### Changed

@@ -1,14 +1,16 @@
 package com.github.gabortim.phonenumber.action
 
-import com.github.gabortim.phonenumber.test.CONTACT_SCHEME_PREFIX
-import com.github.gabortim.phonenumber.test.SEP
 import com.github.gabortim.phonenumber.tool.NumberTools
+import com.github.gabortim.phonenumber.validation.PhoneNumberValidator.Companion.validatorPrefix
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.CONTACT_SCHEME_PREFIX
+import com.github.gabortim.phonenumber.validation.ValidatorConstants.SEP
 import org.openstreetmap.josm.actions.JosmAction
 import org.openstreetmap.josm.command.ChangePropertyCommand
 import org.openstreetmap.josm.command.Command
 import org.openstreetmap.josm.command.SequenceCommand
 import org.openstreetmap.josm.data.UndoRedoHandler
 import org.openstreetmap.josm.data.osm.OsmPrimitive
+import org.openstreetmap.josm.data.preferences.ListProperty
 import org.openstreetmap.josm.gui.MainApplication
 import org.openstreetmap.josm.gui.layer.MainLayerManager
 import org.openstreetmap.josm.gui.layer.MainLayerManager.ActiveLayerChangeListener
@@ -28,34 +30,39 @@ class ContactSchemeSwitchAction :
     }
 
     companion object {
-        private val usableKeys = arrayOf("email", "phone", "mobile", "website", "facebook", "fax")
+        private val usableKeys = ListProperty(
+            "$validatorPrefix.panelSwitchKeys",
+            mutableListOf("email", "phone", "mobile", "website", "facebook", "fax", "instagram", "youtube", "twitter", "linkedin")
+        )
     }
 
     override fun updateEnabledState(selection: Collection<OsmPrimitive>) {
         isEnabled = selection.any { primitive ->
-            primitive.hasKey(*usableKeys)
+            primitive.hasKey(*usableKeys.get().toTypedArray())
         }
     }
 
     override fun actionPerformed(actionEvent: ActionEvent) {
         val primitives = MainApplication.getLayerManager().editDataSet.selected
-
-        val propChangeCmds = ArrayList<ChangePropertyCommand>()
+        val propChangeCmds = mutableListOf<Command>()
 
         for (primitive in primitives) {
-            for (key in usableKeys) {
+            val mergedProperties = mutableMapOf<String, String>()
+            for (key in usableKeys.get()) {
                 if (primitive.hasKey(key)) {
-                    // use new key with prefix
-                    val result = merge(primitive, key)
-
-                    propChangeCmds.add(ChangePropertyCommand(listOf(primitive), result))
+                    mergedProperties.putAll(merge(primitive, key))
                 }
+            }
+
+            if (mergedProperties.isNotEmpty()) {
+                propChangeCmds.add(ChangePropertyCommand(listOf(primitive), mergedProperties))
             }
         }
 
-        val seqCmds = SequenceCommand(tr("Switch to contact prefix scheme"), propChangeCmds as Collection<Command>)
-
-        UndoRedoHandler.getInstance().add(seqCmds, true)
+        if (propChangeCmds.isNotEmpty()) {
+            val seqCmds = SequenceCommand(tr("Switch to contact prefix scheme"), propChangeCmds)
+            UndoRedoHandler.getInstance().add(seqCmds, true)
+        }
     }
 
     /**
@@ -101,5 +108,9 @@ class ContactSchemeSwitchAction :
                 }
             })
         }
+    }
+
+    override fun destroy() {
+        MainApplication.getLayerManager().removeActiveLayerChangeListener(this)
     }
 }
