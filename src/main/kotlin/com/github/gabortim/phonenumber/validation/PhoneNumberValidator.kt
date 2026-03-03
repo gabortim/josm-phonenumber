@@ -62,11 +62,12 @@ class PhoneNumberValidator : TagTest(
             "fax",              // 190.245
             "contact:fax",      // 90.630
             "contact:mobile",   // 54.784
+            "emergency:phone",  // 19.817 as of 2026-02-01
             "phone:mobile"      // 5.977
         )
 
         /**
-         * @return true if the key contains usable key for the plugin. Includes number suffixed keys, like phone_1.
+         * @return true if the key contains a usable key for the plugin. Includes suffixed keys, like phone_1.
          */
         fun isKeyUsable(key: String): Boolean {
             return usableKeys.any { s: String -> PatternUtils.compile("${s}(_\\d*)?").matcher(key).matches() }

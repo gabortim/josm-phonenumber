@@ -145,6 +145,7 @@ class PhoneNumber(
                     when (failReason) {
                         FailReason.NONE -> {
                             val targetKey = when {
+                                "emergency:phone" in tag.key.lowercase() -> "emergency:phone"
                                 "fax" in tag.key.lowercase() -> "fax"
                                 phoneNumberUtil.getNumberType(parsed) == PhoneNumberType.MOBILE -> {
                                     prefix = CONTACT_SCHEME_PREFIX
