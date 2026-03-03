@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Checkbox in the settings to disable _forced_ contact prefix scheme switch (issue #11). It
   is still possible that switching happens if the object contains specific keys, e.g. `mobile`.
 - Make Tags/Memberships panel `contact:` switch tags runtime configurable
+- Support for `emergency:phone`
 ### Changed
 - Minimum required Java version is 17 from now on
 - Update Gradle to 8.14.3
