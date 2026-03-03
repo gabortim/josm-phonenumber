@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - 2026-xx-xx
+## [1.2.0] - 2026-03-03
 ### Added
 - Checkbox in the settings to disable _forced_ contact prefix scheme switch (issue #11). It
   is still possible that switching happens if the object contains specific keys, e.g. `mobile`.
