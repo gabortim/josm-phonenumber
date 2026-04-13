@@ -60,7 +60,7 @@ jobs:
           sudo apt-get install -y gettext
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
         with:
           dependency-graph: generate-and-submit
 
